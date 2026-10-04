@@ -1,0 +1,230 @@
+.page {
+  background-color: var(--bg-cream);
+  min-height: 100vh;
+  padding-top: 150px; /* Clears the fixed header */
+}
+
+.header {
+  background-color: var(--primary);
+  color: white;
+  padding: var(--spacing-12) 0;
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-playfair), serif;
+  font-size: 3rem;
+  margin-bottom: var(--spacing-4);
+}
+
+.subtitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.content {
+  padding: var(--spacing-12) 0;
+  display: grid;
+  gap: var(--spacing-10);
+}
+
+@media (min-width: 992px) {
+  .content {
+    grid-template-columns: 1fr 1fr;
+    align-items: flex-start;
+  }
+}
+
+.sectionTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 2rem;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-6);
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-5);
+}
+
+@media (min-width: 600px) {
+  .benefitsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.benefitCard {
+  background-color: var(--bg-white);
+  padding: var(--spacing-6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease;
+}
+
+.benefitCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.benefitIcon {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--blue-mist);
+  color: var(--primary);
+  margin-bottom: var(--spacing-3);
+}
+
+.benefitCard h3 {
+  font-family: var(--font-outfit), sans-serif;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-2);
+}
+
+.benefitCard p {
+  color: var(--text-body);
+  font-size: 0.95rem;
+}
+
+.formCard {
+  background-color: var(--bg-white);
+  padding: var(--spacing-8);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.formTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-2);
+}
+
+.formSubtitle {
+  color: var(--text-body);
+  margin-bottom: var(--spacing-6);
+}
+
+.formGroup {
+  margin-bottom: var(--spacing-5);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 600px) {
+  .formRow {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-5);
+  }
+}
+
+.formCard label,
+.formCard legend {
+  display: block;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-2);
+}
+
+.formCard input[type="text"],
+.formCard input[type="tel"],
+.formCard select {
+  width: 100%;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background-color: var(--bg-cream);
+  transition: border-color 0.2s;
+}
+
+.formCard input:focus-visible,
+.formCard select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+  border-color: var(--primary);
+}
+
+.formCard fieldset {
+  border: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.formCard ::placeholder {
+  color: var(--text-muted);
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.checkboxLabel input {
+  flex-shrink: 0;
+  margin-top: 3px;
+  margin-right: var(--spacing-3);
+  width: 18px;
+  height: 18px;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: var(--spacing-4);
+  font-size: 1.1rem;
+  padding: var(--spacing-4);
+}
+
+.error {
+  background-color: #FDECEA;
+  color: var(--error);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-4);
+  font-size: 0.9rem;
+}
+
+.successMessage {
+  text-align: center;
+  padding: var(--spacing-8) 0;
+}
+
+.successMessage h3 {
+  color: var(--success);
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-3);
+}
+
+.successMessage p {
+  color: var(--text-body);
+  margin-bottom: var(--spacing-6);
+}

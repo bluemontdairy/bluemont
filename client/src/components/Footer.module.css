@@ -1,0 +1,193 @@
+.footer {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 120px 0 28px;
+  background:
+    radial-gradient(ellipse at 85% 0%, rgba(111, 160, 218, 0.35) 0%, transparent 55%),
+    var(--primary-dark);
+  color: rgba(255, 255, 255, 0.82);
+  border-top-left-radius: 50% 60px;
+  border-top-right-radius: 50% 60px;
+  font-family: var(--font-nunito), sans-serif;
+}
+
+/* Mascot leaning over the curved top edge. Overflow is hidden on the footer,
+   so it sits just inside the curve rather than above it. */
+.peek {
+  position: absolute;
+  top: 18px;
+  right: clamp(16px, 10vw, 180px);
+  width: 120px;
+  height: auto;
+  transform: rotate(8deg);
+  pointer-events: none;
+}
+
+.watermark {
+  position: absolute;
+  left: -120px;
+  bottom: -160px;
+  width: 520px;
+  height: auto;
+  opacity: 0.06;
+  filter: grayscale(1) brightness(3);
+  pointer-events: none;
+}
+
+.footerContent {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.wordmark {
+  width: min(260px, 64vw);
+  height: auto;
+}
+
+.tagline {
+  max-width: 300px;
+  margin-top: 12px;
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.social {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.social a {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--bg-white);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.social a:hover {
+  background: var(--brand-yellow);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.col h3 {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--brand-yellow);
+  margin-bottom: 16px;
+}
+
+.col ul {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.col a {
+  transition: color 0.15s ease;
+}
+
+.col a:hover {
+  color: var(--brand-yellow);
+}
+
+.brandName {
+  display: block;
+  color: var(--bg-white);
+  font-weight: 800;
+}
+
+.brandNote {
+  display: block;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footerCta {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--brand-yellow);
+  color: var(--ink) !important;
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.footerCta:hover {
+  background: var(--brand-yellow-deep);
+  transform: translateY(-2px);
+}
+
+.footer a:focus-visible {
+  outline: 2px solid var(--brand-yellow);
+  outline-offset: 3px;
+}
+
+.bottomBar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.toTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  transition: color 0.15s ease;
+}
+
+.toTop:hover {
+  color: var(--brand-yellow);
+}
+
+@media (max-width: 960px) {
+  .footerContent {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .brandSection {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .footer {
+    padding-top: 110px;
+  }
+
+  .footerContent {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .peek {
+    width: 92px;
+    top: 26px;
+  }
+}
