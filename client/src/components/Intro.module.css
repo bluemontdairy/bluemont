@@ -1,0 +1,64 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--bg-cream);
+  animation: introOut 2.6s ease-in forwards;
+}
+
+/* The artwork shows through the letterforms: the word is a window onto the
+   fill image rather than painted type. At the starting size each glyph samples
+   a tiny patch of the image, so it reads as near-solid colour, and the photo
+   resolves as the word grows -- the same reveal as the reference. */
+.word {
+  font-family: var(--font-display), var(--font-outfit), sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.25rem, 5.5vw, 4.5rem);
+  letter-spacing: 0.16em;
+  text-indent: 0.16em; /* offset the trailing letter-space so it stays centred */
+  line-height: 1;
+  white-space: nowrap;
+
+  background-image: url('/hero/intro-fill.jpg');
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  will-change: transform, opacity;
+  animation: introZoom 2.6s cubic-bezier(0.66, 0, 0.86, 0.32) forwards;
+}
+
+@keyframes introZoom {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(26);
+    opacity: 1;
+  }
+}
+
+@keyframes introOut {
+  0%,
+  72% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    display: none;
+  }
+}

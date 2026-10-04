@@ -1,0 +1,40 @@
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.toggle {
+  position: absolute;
+  right: clamp(16px, 3vw, 40px);
+  bottom: 190px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-white);
+  background: var(--brand-yellow);
+  color: var(--primary-dark);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(12, 34, 66, 0.25);
+}
+
+.toggle:hover {
+  background: var(--brand-yellow-deep);
+}
+
+.toggle:focus-visible {
+  outline: 3px solid var(--bg-white);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .toggle {
+    bottom: 186px;
+  }
+}

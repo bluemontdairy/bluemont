@@ -1,0 +1,85 @@
+.carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.track {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 4px;
+  padding: 8px 4px 12px;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.track > li {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid var(--bg-white);
+  background: var(--brand-yellow);
+  color: var(--primary-dark);
+  box-shadow: 0 6px 16px rgba(12, 34, 66, 0.2);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.15s ease, opacity 0.2s ease;
+}
+
+.arrow:hover:not(:disabled) {
+  background: var(--brand-yellow-deep);
+}
+
+.arrow:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.prev {
+  left: -24px;
+}
+
+.next {
+  right: -24px;
+}
+
+@media (max-width: 640px) {
+  .arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .prev {
+    left: -8px;
+  }
+
+  .next {
+    right: -8px;
+  }
+}
