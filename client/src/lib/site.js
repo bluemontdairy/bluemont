@@ -50,6 +50,21 @@ export const PUBLIC_ROUTES = [
   { path: '/partner', changeFrequency: 'monthly', priority: 0.9 },
 ];
 
+// Next.js replaces (doesn't merge) a parent's openGraph/twitter objects, so
+// every page builds both through this helper to keep the share image.
+export const pageSocial = ({ title, description, path }) => ({
+  openGraph: {
+    type: 'website',
+    locale: 'en_NP',
+    siteName: SITE.name,
+    url: path,
+    title,
+    description,
+    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: "Baeley's ice cream by Blue Mont Dairy, Lalitpur" }],
+  },
+  twitter: { card: 'summary_large_image', title, description, images: [SITE.ogImage] },
+});
+
 export const whatsappLink = (message) =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
 

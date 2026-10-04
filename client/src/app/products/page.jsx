@@ -2,17 +2,18 @@ import ProductCatalog from '../../components/ProductCatalog';
 import styles from './page.module.css';
 import { getActiveProducts } from '../../lib/catalog';
 import { brandLabel } from '../../lib/brands';
-import { SITE_URL, jsonLd } from '../../lib/site';
+import { SITE_URL, jsonLd, pageSocial } from '../../lib/site';
 
 export const metadata = {
   title: "Ice Cream Price List (MRP) — Baeley's, Blissberry & Top Kulfi",
   description:
     "Full Blue Mont Dairy catalog with MRP in NPR: Baeley's cones, cups, sundaes, bars, 500 ml and 1 litre tubs and bulk tub boxes, Blissberry Kulfusion sticks and Top Kulfi. Wholesale supply across Kathmandu, Lalitpur and Bhaktapur.",
   alternates: { canonical: '/products' },
-  openGraph: {
+  ...pageSocial({
     title: "Ice Cream Price List — Baeley's, Blissberry & Top Kulfi",
-    url: '/products',
-  },
+    description: "MRP for every Baeley's, Blissberry and Top Kulfi pack, plus wholesale supply across Kathmandu Valley.",
+    path: '/products',
+  }),
 };
 
 const productListJsonLd = (products) => ({

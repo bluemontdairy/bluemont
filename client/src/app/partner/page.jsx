@@ -1,16 +1,17 @@
 import PartnerForm from './PartnerForm';
 import styles from './page.module.css';
+import { pageSocial } from '../../lib/site';
 
 export const metadata = {
   title: 'Stock Our Ice Cream — Free Branded Deep Freezer for Shops',
   description:
     "Stock Baeley's, Blissberry and Top Kulfi in your shop, kirana, cafe, bakery or canteen. Branded deep freezer placement, scheduled cold-chain restocking and POS support across Kathmandu, Lalitpur and Bhaktapur.",
   alternates: { canonical: '/partner' },
-  openGraph: {
+  ...pageSocial({
     title: 'Want Blue Mont ice cream in your place?',
     description: 'Branded deep freezers, high-margin range and scheduled cold-chain restock for retail partners in Kathmandu Valley.',
-    url: '/partner',
-  },
+    path: '/partner',
+  }),
 };
 
 // Section 5.1 of the scope document.

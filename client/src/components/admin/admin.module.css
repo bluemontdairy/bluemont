@@ -3,7 +3,7 @@
 .shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   background: #F5F7FA;
   font-family: var(--font-inter), system-ui, sans-serif;
   color: var(--text-dark);
@@ -11,12 +11,13 @@
 
 @media (min-width: 900px) {
   .shell {
-    grid-template-columns: 232px 1fr;
+    grid-template-columns: 232px minmax(0, 1fr);
   }
 }
 
 /* Sidebar / top bar */
 .nav {
+  min-width: 0;
   background: var(--ink);
   color: #fff;
   padding: var(--spacing-4);
@@ -242,6 +243,14 @@
   flex: 1 1 220px;
 }
 
+@media (max-width: 640px) {
+  .toolbar > .input,
+  .toolbar > .select {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -410,6 +419,7 @@
 
 .table {
   width: 100%;
+  min-width: 760px; /* scroll sideways on narrow screens instead of squeezing names */
   border-collapse: collapse;
   font-size: 0.88rem;
 }
