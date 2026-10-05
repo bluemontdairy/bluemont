@@ -199,27 +199,24 @@
   pointer-events: none;
 }
 
-.heroBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 18px;
-  padding: 7px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  font-size: 0.85rem !important;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  backdrop-filter: blur(6px);
+/* Same eyebrow as the sections below, with a rule on each side because the
+   hero is centred. */
+.heroEyebrow {
+  margin-bottom: 16px;
+  font-size: 0.82rem !important;
+  text-shadow: 0 2px 0 rgba(12, 34, 66, 0.2);
 }
 
-.heroBadgeDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.heroEyebrow::before,
+.heroEyebrow::after {
   background: var(--brand-yellow);
-  box-shadow: 0 0 0 4px rgba(255, 222, 114, 0.3);
+}
+
+.heroEyebrow::after {
+  content: '';
+  width: 22px;
+  height: 3px;
+  border-radius: 3px;
 }
 
 .heroCtas {

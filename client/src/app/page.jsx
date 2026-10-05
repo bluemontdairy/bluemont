@@ -44,9 +44,8 @@ export default function Home() {
         <div className={styles.heroShade} aria-hidden="true" />
         <div className={styles.heroTexture} aria-hidden="true" />
         <div className={styles.heroInner}>
-          <p className={styles.heroBadge}>
-            <span className={styles.heroBadgeDot} aria-hidden="true" />
-            Lalitpur&apos;s monster-sized ice cream
+          <p className={`${styles.eyebrow} ${styles.eyebrowLight} ${styles.heroEyebrow}`}>
+            Churned fresh in Lalitpur
           </p>
           <h1 className={styles.heroTitle}>
             <span className={styles.heroLine}>Freeze the moment with</span>
