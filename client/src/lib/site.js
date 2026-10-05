@@ -7,9 +7,9 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://bluemont.c
 export const SITE = {
   name: 'Blue Mont Dairy',
   legalName: 'Blue Mont Dairy Pvt. Ltd.',
-  tagline: "Baeley's, Blissberry & Top Kulfi ice cream from Lalitpur, Nepal",
+  tagline: "Ice cream & kulfi from Lalitpur, Nepal: Top Kulfi, Baeley's & Blissberry",
   description:
-    "Blue Mont Dairy is a Lalitpur ice cream and dairy manufacturer with 20 years of heritage, making Baeley's, Blissberry and Top Kulfi. Wholesale supply and branded deep freezers for shops, cafes and canteens across Kathmandu, Lalitpur and Bhaktapur.",
+    "Blue Mont Dairy is a Lalitpur ice cream and kulfi maker with 20 years of heritage, making Top Kulfi, Baeley's ice cream and Blissberry Kulfusion. Premium quality at an honest price, sold in 12+ districts and cities across Nepal.",
   foundingYear: 2006, // TODO: confirm (scope says ~20 years of operation)
   // TODO: confirm the real numbers and email before launch.
   phone: process.env.NEXT_PUBLIC_SALES_PHONE || '+977-1-0000000',
@@ -25,11 +25,13 @@ export const SITE = {
   geo: { latitude: 27.6644, longitude: 85.3188 }, // TODO: exact factory pin
   areaServed: ['Lalitpur', 'Kathmandu', 'Bhaktapur'],
   social: ['https://instagram.com/bluemont_dairy'],
-  brands: ["Baeley's", 'Blissberry', 'Top Kulfi'],
+  brands: ['Top Kulfi', "Baeley's", 'Blissberry'],
   ogImage: '/og.jpg',
 };
 
 export const SEO_KEYWORDS = [
+  'ice cream Nepal',
+  'kulfi Nepal',
   'dairy manufacturer Nepal',
   'ice cream manufacturer Lalitpur',
   'ice cream wholesale Kathmandu',
@@ -60,7 +62,7 @@ export const pageSocial = ({ title, description, path }) => ({
     url: path,
     title,
     description,
-    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: "Baeley's ice cream by Blue Mont Dairy, Lalitpur" }],
+    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: "Ice cream and kulfi by Blue Mont Dairy, Lalitpur" }],
   },
   twitter: { card: 'summary_large_image', title, description, images: [SITE.ogImage] },
 });
@@ -80,7 +82,7 @@ export const organizationJsonLd = () => ({
   legalName: SITE.legalName,
   description: SITE.description,
   url: SITE_URL,
-  logo: `${SITE_URL}/brand/logo/badge.webp`,
+  logo: `${SITE_URL}/brand/logo/bluemont-blue.webp`,
   image: `${SITE_URL}${SITE.ogImage}`,
   telephone: SITE.phone,
   email: SITE.email,

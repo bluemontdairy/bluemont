@@ -8,7 +8,7 @@ import styles from './Header.module.css';
 
 const LEFT_LINKS = [
   { href: '/products', label: 'Products' },
-  { href: '/#story', label: 'Our story' },
+  { href: '/#brands', label: 'Our brands' },
   { href: '/#quality', label: 'Quality' },
 ];
 
@@ -59,12 +59,12 @@ export default function Header() {
           ))}
         </nav>
 
-        <Link href="/" className={styles.logo} onClick={closeMenu} aria-label="Baeley's by Blue Mont Dairy, home">
+        <Link href="/" className={styles.logo} onClick={closeMenu} aria-label="Blue Mont Dairy, home">
           <Image
-            src="/brand/logo/badge.webp"
+            src="/brand/logo/bluemont-white.webp"
             alt=""
-            width={600}
-            height={600}
+            width={439}
+            height={354}
             sizes="96px"
             className={styles.logoImg}
             preload
@@ -119,7 +119,7 @@ export default function Header() {
           ))}
         </ul>
         <Link href="/partner" className={styles.sheetCta} onClick={closeMenu}>
-          Stock Baeley&apos;s in your store
+          Stock Blue Mont in your store
         </Link>
         <Image
           src="/brand/mascots/yeti-wave.webp"

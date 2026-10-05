@@ -1,0 +1,423 @@
+# Top-level nodes of Figma file HYLokr4vo4vzgyyfHHtFSO page 0:1, snapshot 2026-10-05
+id	type	name	w	h
+504:2	frame	Frame 32	2687	2092
+504:4	frame	Main logo	887	823
+504:20	frame	1	887	823
+504:36	frame	4	887	823
+504:52	frame	3	887	823
+504:68	frame	5	887	823
+504:96	frame	6	887	823
+504:112	frame	2	887	823
+504:128	vector	Vector	581	530
+504:129	vector	Vector	392	495
+504:130	frame	Main logo	887	823
+504:146	frame	stamp	887	823
+504:160	frame	Group 36	612	607
+504:173	frame	Main logo	887	823
+504:189	frame	Main logo	887	823
+504:201	vector	Vector	581	530
+504:202	frame	Word mark 2	887	823
+504:217	frame	Word mark 3	887	823
+504:248	vector	Vector	439	353
+504:249	frame	Inverse	887	823
+504:264	vector	Vector	439	353
+504:265	frame	Word mark	887	823
+504:282	frame	Group 38	581	530
+504:298	vector	Vector	581	530
+504:299	frame	Main logo	887	823
+504:315	vector	Vector	581	530
+504:316	frame	Main logo	887	823
+504:332	frame	Group 375	581	607
+504:347	frame	Colors	1330	1236
+504:362	rounded-rectangle	Free_Baseball_Cap_Mockup_1 1	2565	1932
+504:363	rounded-rectangle	Circle Signage Mockup 1	1607	1932
+504:364	rounded-rectangle	1234 1	1217	1929
+504:365	frame	Group 21	1932	1932
+504:381	rounded-rectangle	Free Fabric Apron Branding Mockup 1	2426	1941
+504:382	rounded-rectangle	Free Woman Wearing Oversized T-Shirt Mockup 1	1187	1929
+504:383	rounded-rectangle	Free Shopping Bag with Box Mockup 1	2701	1929
+504:384	rounded-rectangle	Free Circle Restaurant Sign Mockup 1	2898	1932
+504:385	rounded-rectangle	Free Circle Sign Mockup 1	2377	1962
+504:386	line	Line 1	10161	0
+504:387	vector	Vector 2	0	2097
+504:388	vector	Vector 3	0	2239
+504:389	vector	Vector 4	0	2046
+504:390	vector	Vector 5	0	2219
+504:391	vector	Vector 6	0	2168
+504:392	vector	Vector 7	0	2046
+504:393	text	Mockups	856	353
+504:394	text	Color variations	1607	353
+504:395	text	patterns	919	353
+504:396	text	visiting CARD	783	705
+504:397	text	Flex Board	574	705
+504:398	text	Letterhead	1109	353
+504:399	text	ID card	745	353
+504:400	text	PNG/SVG	878	353
+504:401	text	Logo versions	1379	353
+504:402	text	BG check	876	353
+504:403	text	Main colors	1134	353
+504:404	vector	Vector	585	483
+504:405	frame	A4 - 10	1616	1142
+504:413	frame	A4 - 15	1616	1142
+504:421	frame	A4 - 11	1616	1142
+504:430	text	Sub Font: Magic Candy	760	125
+504:431	text	Main Font: Burgendry	738	125
+504:432	frame	theme colors	1768	1142
+504:444	frame	Group 100	19120	988
+504:448	frame	Group 155	12400	988
+504:452	frame	Group 126	12400	988
+504:456	frame	Group 357	13226	988
+504:460	vector	Vector	1583	1274
+504:461	frame	Visiting card Front 	2015	1152
+504:470	frame	Visiting card Front 	2015	1152
+504:479	frame	Visiting card Front 	2015	1152
+504:482	frame	Visiting card Front 	2015	1152
+504:532	frame	Visiting card Front 	2015	1152
+504:580	frame	Visiting card Front 	2015	1152
+504:622	frame	Visiting card Front 	2015	1152
+504:672	frame	flex board	3114	1370
+504:701	frame	Group 125	752	275
+504:711	rounded-rectangle	Billboard_Mockup_2 1	2169	1277
+504:712	rounded-rectangle	Billboard_Mockup_1 2	1703	1277
+504:713	frame	Frame 3	2938	1717
+504:717	frame	Group 229	1765	751
+504:720	frame	Frame 29	1064	622
+504:724	frame	Frame 30	1064	622
+504:728	frame	Frame 31	1064	622
+504:732	frame	A4 - 12	823	1165
+504:755	frame	Merina	823	1165
+504:780	frame	Suresh	823	1165
+504:805	frame	WEBSITE	823	1165
+504:830	frame	Mobanking	823	1165
+504:855	rounded-rectangle	image 84	968	1366
+504:856	rounded-rectangle	image 85	969	1364
+504:857	rounded-rectangle	image 86	967	1366
+504:858	rounded-rectangle	image 87	972	1373
+504:859	rounded-rectangle	image 88	1026	483
+504:860	rounded-rectangle	image 91	963	1366
+504:861	rounded-rectangle	image 92	965	1366
+504:862	rounded-rectangle	image 93	964	1366
+504:863	rounded-rectangle	image 94	995	1366
+504:864	rounded-rectangle	image 95	997	1373
+504:865	rounded-rectangle	image 96	1000	1368
+504:866	rounded-rectangle	image 97	981	1348
+504:867	rounded-rectangle	image 98	985	1355
+504:868	rounded-rectangle	image 99	979	1344
+504:869	text	AOA	335	227
+504:870	text	Reg.	356	227
+504:871	text	Pan B	436	227
+504:872	text	Pan S	439	227
+504:873	text	MOA	371	227
+504:874	text	Praman patra	541	116
+504:875	text	Byawasaye Darta	444	232
+504:876	rounded-rectangle	image 100	998	1366
+504:877	rounded-rectangle	image 101	999	1373
+504:878	rounded-rectangle	image 102	998	1368
+504:879	rounded-rectangle	image 103	983	1348
+504:880	rounded-rectangle	image 104	986	1355
+504:881	rounded-rectangle	image 105	977	1344
+504:882	rounded-rectangle	image 106	970	1335
+504:883	rounded-rectangle	image 107	970	1338
+504:884	rounded-rectangle	image 108	964	1329
+504:885	rounded-rectangle	image 109	964	1325
+504:886	rounded-rectangle	image 110	962	1328
+504:887	rounded-rectangle	image 111	962	1320
+504:888	rounded-rectangle	image 112	962	1324
+504:889	rounded-rectangle	WhatsApp Image 2025-02-27 at 20.08.41_0a0d8d58 1	976	1366
+504:890	rounded-rectangle	WhatsApp Image 2025-03-02 at 13.17.25_55533240 1	1024	1366
+504:891	rounded-rectangle	WhatsApp Image 2025-03-02 at 13.17.26_33683cc8 1	1024	1366
+504:892	rounded-rectangle	WhatsApp Image 2025-03-02 at 13.17.26_c35073e1 1	1024	1366
+504:893	rounded-rectangle	WhatsApp Image 2025-03-02 at 13.17.27_ad323ae9 1	1024	1366
+504:894	text	check	298	127
+504:895	text	check	298	127
+504:896	text	check	298	127
+504:897	text	check	298	127
+504:898	frame	Map	965	1366
+504:903	frame	Map	965	1366
+504:907	frame	Pan	965	1366
+504:909	frame	Nagarikta Merina	965	1366
+504:913	frame	Nagarikta Suresh	965	1366
+504:917	text	Documents	10802	2324
+504:918	frame	clarification	1024	1363
+504:920	frame	clarification 2	1024	1363
+504:922	frame	clarification 3	1024	1363
+504:924	text	Font: Gold shine	1137	246
+504:925	frame	flex board	3157	1105
+504:975	frame	flex board	3157	1105
+504:1024	text	ब्लु मन्ट डेरी प्राइभेत लिमितेड	3042	344
+504:1025	frame	assets	9923	8005
+504:4355	frame	Frame 19	886	823
+504:4371	frame	Group	882	547
+504:4383	frame	Group	882	547
+504:4395	vector	Vector 105	1609	0
+504:4396	vector	Vector 101	1609	0
+504:4397	frame	For all 2 500ml	5582	812
+504:4586	frame	500 ml	5582	812
+504:4757	frame	For all 2 500ml	5582	812
+504:4998	frame	For all 2 500ml	5582	812
+504:5210	frame	For all 2 500ml	5582	812
+504:5417	frame	For all 2 500ml	5582	812
+504:5658	frame	For all 2 500ml	5582	812
+504:5824	frame	For all 2 500ml	5582	812
+504:6081	frame	100 ml	3427	396
+504:6251	frame	100 ml	3427	396
+504:6402	frame	Mouth	321	135
+504:6421	frame	100 ml	3427	396
+504:6639	frame	100 ml	3427	396
+504:6824	frame	100 ml	3427	396
+504:7007	frame	100 ml	3427	396
+504:7224	frame	100 ml	3427	396
+504:7368	frame	100 ml	3427	396
+504:7599	frame	1000 ml	3975	1256
+504:7777	frame	1000 ml	3975	1256
+504:7940	frame	unseen	7126	12221
+504:8379	frame	1000 ml	3975	1256
+504:8601	frame	1000 ml	3975	1256
+504:8807	frame	1000 ml	3975	1256
+504:8991	frame	1000 ml	3975	1256
+504:9211	frame	1000 ml	3975	1256
+504:9356	frame	1000 ml	3975	1256
+504:9594	text	Strawberry	1038	294
+504:9595	text	Chocolate	978	294
+504:9596	text	Butterscotch	1240	294
+504:9597	text	Pistachio	874	294
+504:9598	text	21st Love	861	294
+504:9599	text	Vanilla	604	294
+504:9600	text	Neo without nutrition	2417	357
+504:9601	text	Freezer	854	357
+504:9602	text	Cone	626	357
+504:9603	text	Sundae cup	1357	357
+504:9604	text	40 ml cup	1092	357
+504:9605	text	50 ML CUP	1214	357
+504:9606	text	board	671	357
+504:9607	text	Price list	955	357
+504:9608	text	Logos	701	357
+504:9609	text	4 Litre Box	1168	357
+504:9610	text	Wrapper	990	357
+504:9611	text	with nutrition	1523	357
+504:9612	frame	Desktop - 2	3684	2089
+504:9826	frame	A4 - 17	1131	1601
+504:9834	frame	Frame 34	2616	2092
+504:9836	rounded-rectangle	Characters	5332	1600
+504:9837	text	t	4	11
+504:9838	frame	Khuwa	1562	1147
+504:9890	text	Sub Font: Mocha Cookies	778	119
+504:9891	text	Main Font: Batman Knight	732	98
+504:9892	text	DFTQC	785	279
+504:9893	text	Current Free Barcodes	5356	607
+504:9894	text	Freezer KYC	1354	279
+504:9895	text	Freezer Agreement Document	1091	93
+504:9896	text	01 25 82 01 207	700	113
+504:9897	text	01 25 82 01 207	2724	438
+504:9898	text	DFTQC	1234	438
+504:9899	rounded-rectangle	Rectangle	5332	1600
+504:9900	frame	Taro	1739	2173
+504:10292	frame	ice cream variations	594	1392
+504:10300	frame	Strawberry	1739	2173
+504:10692	frame	Mango	1739	2173
+504:11086	frame	Group 316	594	1392
+504:11096	frame	Blueberry	1739	2173
+504:11488	frame	ice cream variations	594	1392
+504:11496	frame	Honeydew	1739	2173
+504:11888	frame	ice cream variations	594	1392
+504:11896	frame	Coffee	1739	2173
+504:12288	frame	Chocolate	1739	2173
+504:12680	text	Released	759	484
+504:12681	text	Unreleased	939	484
+504:12682	frame	Frame 49	557	256
+504:12700	frame	Frame 50	557	256
+504:12719	frame	Frame 51	557	256
+504:12758	rounded-rectangle	Blissberry_Kulfi_blueberry[2] 1	912	1049
+504:12759	rounded-rectangle	Blissberry_Kulfi_Taro[1] 1	912	1049
+504:12760	rounded-rectangle	Blissberry_Kulfi_mango[1] 1	912	1049
+504:12761	rounded-rectangle	Blissberry_Kulfi_Honeydew[2] 1	912	1049
+504:12762	frame	4 ltr design	6416	4138
+504:13233	frame	Layer 1	1038	1303
+504:13357	rounded-rectangle	WhatsApp Image 2025-05-26 at 11.36.32_f79239d0 1	6553	4231
+504:13358	rounded-rectangle	image 207	1791	1791
+504:13359	frame	Group	731	609
+504:13412	vector	Vector 803	501	210
+504:13413	frame	Group 230	567	241
+504:13416	frame	Mini Chocobar	1942	2158
+504:13667	frame	oreo	1942	2158
+504:13746	frame	oreo	1942	2158
+504:13825	frame	Frame 27	6229	4684
+504:14468	frame	Group	1142	1224
+504:14580	rounded-rectangle	193 Free Popsicle Bag Mockup 1	707	1432
+504:14581	rounded-rectangle	Strawberry	1468	2982
+504:14582	text	17.5	415	251
+504:14583	text	35.5	443	251
+504:14584	rounded-rectangle	Butterscotch	1468	2982
+504:14585	rounded-rectangle	Chocolate	1468	2982
+504:14586	rounded-rectangle	Vanilla	1468	2982
+504:14587	rounded-rectangle	pistachio	522	631
+504:14588	rounded-rectangle	mango	331	788
+504:14589	rounded-rectangle	Vanilla	704	714
+504:14590	rounded-rectangle	Black currant	631	716
+504:14591	rounded-rectangle	strawberry	394	755
+504:14592	rounded-rectangle	21ST love	486	725
+504:14593	rounded-rectangle	Chocolate	453	606
+504:14594	rounded-rectangle	Butterscotch	708	635
+504:14595	rounded-rectangle	Blueberry	720	654
+504:14596	rounded-rectangle	Main	694	784
+504:14597	rounded-rectangle	image 208	1815	1362
+504:14598	rounded-rectangle	characters 1	2304	1843
+504:14599	frame	340L front	4647	2879
+504:14627	frame	340 Left side	2425	2879
+504:14761	frame	340L Right side	2425	1859
+504:14922	frame	200L Left side	2021	2930
+504:15056	frame	200L right side	2020	2071
+504:15216	frame	600L	6204	2242
+504:15247	frame	200L front	3536	2930
+504:15275	frame	Group	1337	1278
+504:15410	rounded-rectangle	WhatsApp Image 2025-06-12 at 12.48.33_8fdaedff 1	5222	4343
+504:15411	frame	Invoice Blue Mont pan bill	967	1368
+504:15495	rounded-rectangle	oreo 1 1	640	1432
+504:15496	rounded-rectangle	coco crunch	718	1432
+504:15497	rounded-rectangle	Gemini_Generated_Image_wvlam6wvlam6wvla 1	685	1432
+504:15498	rounded-rectangle	image 277	769	1432
+504:15499	rounded-rectangle	image 278	642	1432
+504:15500	rounded-rectangle	image 286	800	1432
+504:15501	rounded-rectangle	image 287	576	1432
+504:15502	frame	Chocobar	1942	2158
+504:15601	frame	Nutty crunch	1942	2158
+504:15705	frame	Milky bar	1739	2173
+504:15810	rounded-rectangle	Baeley's Ice Cream 1	1942	2158
+504:15811	rounded-rectangle	Baeley's Ice Cream 2	1943	2158
+504:15812	rounded-rectangle	Baeley's Ice Cream 3	1727	2158
+504:15813	frame	Butterscotch	2395	2348
+504:15885	frame	Chocolate	2395	2348
+504:15957	rounded-rectangle	Baeleys Chocobar wrapper.jpg 1	1942	2157
+504:15958	frame	21 Love	2395	2348
+504:16030	rounded-rectangle	DFTQC BACK 1	994	1366
+504:16031	rounded-rectangle	DFTQC FRONT 1	994	1366
+504:16032	rounded-rectangle	byawasaye 1	980	1347
+504:16033	frame	Sundae Baeleys	2204	866
+504:16371	frame	Sundae cup	2383	936
+504:16774	rounded-rectangle	Sundae Baeleys2-2026.jpg 1	1811	1016
+504:16775	rounded-rectangle	Gemini_Generated_Image_8a7gun8a7gun8a7g 3	135	133
+504:16776	rounded-rectangle	image 39	138	120
+504:16777	rounded-rectangle	Gemini_Generated_Image_id5e83id5e83id5e 1	143	133
+504:16778	rounded-rectangle	Gemini_Generated_Image_ej98iiej98iiej98 1	143	133
+504:16779	rounded-rectangle	image 35	127	146
+504:16780	rounded-rectangle	image 36	100	120
+504:16781	rounded-rectangle	Gemini_Generated_Image_7mvbxo7mvbxo7mvb 1	181	162
+504:16782	text	Main	130	69
+504:16783	text	Vanilla	174	69
+504:16784	text	Strawberry	301	69
+504:16785	text	Butterscotch	348	69
+504:16786	text	Chocolate	275	69
+504:16787	rounded-rectangle	Vanilla	103	105
+504:16788	rounded-rectangle	strawberry	85	163
+504:16789	rounded-rectangle	Chocolate	102	136
+504:16790	rounded-rectangle	Butterscotch	128	115
+504:16791	rounded-rectangle	Gemini_Generated_Image_sithkmsithkmsith 2	190	170
+504:16792	rounded-rectangle	image 37	149	177
+504:16793	rounded-rectangle	Gemini_Generated_Image_fciszmfciszmfcis 1	165	195
+504:16794	rounded-rectangle	Gemini_Generated_Image_zdr0g8zdr0g8zdr0 1	198	165
+504:16795	rounded-rectangle	Gemini_Generated_Image_9hs0bs9hs0bs9hs0 1	198	165
+504:16796	rounded-rectangle	Butterscotch	128	115
+504:16797	rounded-rectangle	Gemini_Generated_Image_zdr0g8zdr0g8zdr0 2	198	165
+504:16798	rounded-rectangle	Gemini_Generated_Image_9hs0bs9hs0bs9hs0 2	198	165
+504:16799	rounded-rectangle	Gemini_Generated_Image_qcf1hdqcf1hdqcf1 1	190	170
+504:16800	rounded-rectangle	Gemini_Generated_Image_nj5m1xnj5m1xnj5m 2	190	170
+504:16801	rounded-rectangle	Main	128	149
+504:16802	frame	Frame 52	153	182
+504:16804	rounded-rectangle	Gemini_Generated_Image_8a7gun8a7gun8a7g 1	181	179
+504:16805	rounded-rectangle	Gemini_Generated_Image_cq4pkzcq4pkzcq4p 1	173	187
+504:16806	rounded-rectangle	Gemini_Generated_Image_mbmcrnmbmcrnmbmc 1	132	141
+504:16807	rounded-rectangle	Gemini_Generated_Image_3ecfgb3ecfgb3ecf 1	120	159
+504:16808	rounded-rectangle	Gemini_Generated_Image_vsyqb1vsyqb1vsyq 1	123	148
+504:16809	rounded-rectangle	Gemini_Generated_Image_s3zdkus3zdkus3zd 1	258	357
+504:16810	rounded-rectangle	Gemini_Generated_Image_1rst3s1rst3s1rst 1	155	176
+504:16811	frame	Group 355	1538	617
+504:16819	frame	Group 376	1538	617
+504:16827	frame	Group 356	1538	617
+504:16835	rounded-rectangle	ChatGPT Image Feb 24, 2026, 11_55_59 PM 1	235	235
+504:16836	rounded-rectangle	image 360	225	225
+504:16837	frame	Baeley's wholesale pricing 25%	1000	707
+504:16853	frame	Baeley's wholesale pricing 30%	1000	707
+504:16869	frame	Baeley's Dealer pricing 38%	1000	707
+504:16886	frame	Baeley's Dealer pricing 42%	1000	707
+504:16903	rounded-rectangle	Rectangle 167	26301	169
+504:16904	frame	circle 21 Love	1012	1012
+504:16919	frame	circle Chocolate	1012	1012
+504:16933	frame	circle Butterscotch	1012	1012
+504:16947	frame	Rise Maharjan	861	1218
+504:16950	frame	Sofina Maharjan	861	1218
+504:16953	frame	Merina Maharjan	861	1218
+504:16956	frame	Suresh Maharjan	861	1218
+504:16959	frame	Frame 90	2473	2473
+504:16996	rounded-rectangle	Main	1435	1573
+504:16997	frame	Freezer Agreement 4	457	647
+504:17022	frame	Freezer Agreement 5	457	647
+504:17046	frame	Freezer Agreement 6	457	647
+504:17073	frame	KYC1	458	648
+504:17162	frame	KYC2	458	648
+504:17199	frame	KYC3	458	648
+504:17251	frame	Frame 91	489	283
+504:17253	frame	Mobanking	457	647
+504:17256	frame	Mobanking2	457	647
+504:17259	frame	Merina	457	647
+504:17262	frame	Suresh	457	647
+504:17265	rounded-rectangle	Gemini_Generated_Image_id5e83id5e83id5e 2	178	225
+504:17266	frame	Front id	819	1353
+504:17295	frame	Back Id	819	1353
+504:17336	frame	Front page	881	1353
+504:17350	frame	Back page	881	1353
+504:17390	rounded-rectangle	Top Kulfi (3) 1	792	990
+504:17391	frame	Top Kulfi Pricing	1801	2251
+504:17416	rounded-rectangle	Top Kulfi 2	1876	2129
+504:17417	rounded-rectangle	Top Kulfi 3	1876	2129
+504:17418	frame	Desktop - 3	1717	1221
+504:17458	frame	Group 374	1050	641
+504:17463	frame	Kulfi	1206	2202
+504:17786	frame	Kulfi	1206	2202
+504:18109	frame	Kulfi	1206	2202
+504:18435	frame	Kulfi	1206	2202
+504:18767	frame	Kulfi	1206	2202
+504:19102	text	Sushi cat font	1772	474
+504:19103	vector	Vector	1057	739
+504:19104	vector	Vector	1057	739
+504:19105	frame	Top kulfi poster a3 sticker	1645	1163
+504:19109	frame	Top kulfi poster a3 sticker	1645	1163
+504:19115	frame	Top kulfi poster a3 sticker	1645	1163
+504:19123	frame	Top kulfi poster dark	1645	1163
+504:19135	frame	Top kulfi poster bright	1652	1168
+504:19149	frame	Price list Baeleys	2641	1866
+504:19508	rounded-rectangle	Gemini_Generated_Image_x6f3fox6f3fox6f3 1	163	132
+504:19509	rounded-rectangle	Gemini_Generated_Image_mm2kwjmm2kwjmm2k 1	208	311
+504:19510	rounded-rectangle	Gemini_Generated_Image_11zasj11zasj11za 1	330	256
+504:19511	frame	Baeley's 40 ml lid	1492	1492
+504:19528	frame	Top Kulfi a4 Pamplet	1272	1800
+504:19532	frame	Top Kulfi a4 Pamplet	1272	1800
+504:19546	frame	Top Kulfi a4 Pamplet	1272	1800
+504:19549	rounded-rectangle	image 398	1318	1865
+504:19550	rounded-rectangle	ChatGPT Image May 11, 2026, 08_40_54 AM 1	1272	1800
+504:19551	rounded-rectangle	Untitled design 2	1272	1800
+504:19552	frame	Blissberry pamplet	1272	1800
+504:19754	text	Final Output	2197	922
+504:19755	vector	Vector 1071	0	9149
+504:19756	frame	Final	3941	973
+504:19888	rounded-rectangle	image 420	213	213
+504:19889	frame	Baeley's 50 ml lid Vanilla	1169	1169
+504:19907	frame	Baeley's 50 ml lid Butterscotch	1169	1169
+504:19925	frame	Baeley's 50 ml lid Strawberry	1169	1169
+504:19943	frame	Baeley's 50 ml lid 21 Love	1169	1169
+504:19961	frame	Baeley's 50 ml lid Chocolate	1169	1169
+504:19979	frame	50 ML Vanilla	4427	1428
+504:20068	frame	50 ML Chocolate	4377	1235
+504:20253	frame	50 ML Butterscotch	4427	1428
+504:20388	frame	50 ML Strawberry	4377	1235
+504:20565	frame	50 ML 21 Love	4377	1235
+504:20669	frame	Corrected	2641	1866
+504:21056	rounded-rectangle	image 439	681	851
+504:21057	rounded-rectangle	image 441	787	774
+504:21058	rounded-rectangle	image 442	549	686
+504:21059	rounded-rectangle	image 443	174	77
+504:21060	rounded-rectangle	image 444	174	77
+504:21061	frame	Top Kulfi logo	1224	984
+504:21068	rounded-rectangle	image 445	1664	1109
+504:21069	rounded-rectangle	image 446	787	1180
+504:21070	rounded-rectangle	image 447	787	1180
+504:21071	rounded-rectangle	image 448	787	1180
