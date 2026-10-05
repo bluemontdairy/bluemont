@@ -49,7 +49,7 @@ export default function Intro() {
 
   return (
     <div className={`bm-intro ${styles.overlay}`} aria-hidden="true">
-      <span className={styles.word}>BAELEYS</span>
+      <span className={styles.word}>BLUE MONT</span>
     </div>
   );
 }

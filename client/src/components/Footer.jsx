@@ -4,15 +4,16 @@ import styles from './Footer.module.css';
 
 const EXPLORE = [
   { href: '/products', label: 'All products' },
-  { href: '/#story', label: 'Our story' },
+  { href: '/#brands', label: 'Our brands' },
+  { href: '/#top-kulfi', label: 'Top Kulfi' },
   { href: '/#quality', label: 'Quality & food safety' },
   { href: '/partner', label: 'Freezer placement' },
 ];
 
 const BRANDS = [
-  { label: "Baeley's", note: 'Monster-sized treats' },
-  { label: 'Blissberry', note: 'Kulfusion sticks' },
-  { label: 'Top Kulfi', note: 'Khuwa kulfi & popsicles' },
+  { label: 'Top Kulfi', note: 'Kulfi & popsicles' },
+  { label: "Baeley's", note: 'Ice cream' },
+  { label: 'Blissberry', note: 'Kulfusion' },
 ];
 
 export default function Footer() {
@@ -28,11 +29,11 @@ export default function Footer() {
         className={styles.peek}
       />
       <Image
-        src="/brand/logo/badge.webp"
+        src="/brand/logo/bluemont-white.webp"
         alt=""
         aria-hidden="true"
-        width={600}
-        height={600}
+        width={439}
+        height={354}
         sizes="520px"
         className={styles.watermark}
       />
@@ -40,15 +41,15 @@ export default function Footer() {
       <div className={`container ${styles.footerContent}`}>
         <div className={styles.brandSection}>
           <Image
-            src="/brand/logo/wordmark.webp"
-            alt="Baeley's"
-            width={960}
-            height={440}
+            src="/brand/logo/bluemont-white.webp"
+            alt="Blue Mont Dairy"
+            width={439}
+            height={354}
             sizes="(max-width: 768px) 60vw, 280px"
             className={styles.wordmark}
           />
           <p className={styles.tagline}>
-            The sweet taste of life, churned in Lalitpur by Blue Mont Dairy for about 20 years.
+            Ice cream and kulfi from Lalitpur, made by Blue Mont Dairy for about 20 years.
           </p>
           <div className={styles.social}>
             <a href="https://instagram.com/bluemont_dairy" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

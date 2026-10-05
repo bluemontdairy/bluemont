@@ -5,11 +5,11 @@ import { pageSocial } from '../../lib/site';
 export const metadata = {
   title: 'Stock Our Ice Cream — Free Branded Deep Freezer for Shops',
   description:
-    "Stock Baeley's, Blissberry and Top Kulfi in your shop, kirana, cafe, bakery or canteen. Branded deep freezer placement, scheduled cold-chain restocking and POS support across Kathmandu, Lalitpur and Bhaktapur.",
+    "Stock Top Kulfi, Baeley's ice cream and Blissberry Kulfusion in your shop, kirana, cafe, bakery or canteen. Branded deep freezer placement, scheduled cold-chain restocking and POS support from Blue Mont Dairy.",
   alternates: { canonical: '/partner' },
   ...pageSocial({
     title: 'Want Blue Mont ice cream in your place?',
-    description: 'Branded deep freezers, high-margin range and scheduled cold-chain restock for retail partners in Kathmandu Valley.',
+    description: 'Branded deep freezers, a range customers already ask for, and scheduled cold-chain restock for Blue Mont retail partners.',
     path: '/partner',
   }),
 };
@@ -17,8 +17,8 @@ export const metadata = {
 // Section 5.1 of the scope document.
 const VALUE_POINTS = [
   {
-    title: 'High-margin turnover',
-    text: 'A complete lineup from fast-moving Rs 20–100 impulse treats to family packs and commercial catering tubs.',
+    title: 'A range people ask for',
+    text: 'Top Kulfi, Baeley\'s and Blissberry: the kulfi everybody knows, everyday ice cream treats, family packs and catering tubs.',
     icon: 'M3 17l6-6 4 4 8-8M14 7h7v7',
   },
   {
@@ -45,8 +45,8 @@ export default function PartnerPage() {
         <div className="container">
           <h1 className={styles.title}>Want Us in Your Place?</h1>
           <p className={styles.subtitle}>
-            Departmental stores, kirana marts, cafes, bakeries and school canteens: stock Blue Mont ice cream and
-            apply for a branded deep freezer.
+            Departmental stores, kirana marts, cafes, bakeries and school canteens: join the Blue Mont family.
+            We look after our partners with branded freezers, reliable restocks and everything your counter needs.
           </p>
         </div>
       </header>

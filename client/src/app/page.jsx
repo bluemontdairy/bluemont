@@ -5,7 +5,12 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import Carousel from '../components/Carousel';
 import HeroVideo from '../components/HeroVideo';
-import { FAVORITES, MONSTERS, PARTNER_POINTS, STATS, QUALITY_POINTS, whatsappUrl } from '../lib/homeContent';
+import { BRANDS, FAVORITES, MONSTERS, REVIEWS, STATS, TOP_KULFI, VALUE_PICKS, VALUE_POINTS } from '../lib/homeContent';
+
+export const metadata = {
+  title: { absolute: "Blue Mont Dairy | Ice Cream & Kulfi in Nepal: Top Kulfi, Baeley's, Blissberry" },
+  alternates: { canonical: '/' },
+};
 
 function Check() {
   return (
@@ -25,6 +30,36 @@ function Arrow() {
   );
 }
 
+// A single ice-cream scoop with a drippy rim, tinted per flavour. The shade
+// gradient's id comes from the colour, which is unique per monster.
+const SCOOP_SHAPE =
+  'M8 32a24 24 0 0 1 48 0c0 1-.1 2-.2 3 1.4 4-1.8 7-4.4 4.6-1.6 5.4-6.6 5-7.4.4-2.2 6.6-8.4 6.6-9.6 0-2 5.2-7.6 5-8.6-.2-1.6 4.2-6.6 3.6-6.8-1.4-3 1.4-5.6-1.6-4.2-4.4C8.1 33.4 8 32.7 8 32z';
+
+function Scoop({ color }) {
+  const shade = `scoop-shade-${color.replace('#', '')}`;
+  return (
+    <svg viewBox="0 0 64 58" className={styles.scoop} aria-hidden="true">
+      <defs>
+        <radialGradient id={shade} cx="0.36" cy="0.3" r="0.8">
+          <stop offset="0" stopColor="#fff" stopOpacity="0.45" />
+          <stop offset="0.45" stopColor="#fff" stopOpacity="0" />
+          <stop offset="1" stopColor="#000" stopOpacity="0.28" />
+        </radialGradient>
+      </defs>
+      <path d={SCOOP_SHAPE} fill={color} />
+      <path d={SCOOP_SHAPE} fill={`url(#${shade})`} />
+      <path
+        d="M14 28c2-1 3 1 5 0M26 22c2-1 3 1 5 0M38 27c2-1 3 1 5 0M20 36c2-1 3 1 5 0M34 35c2-1 3 1 5 0"
+        fill="none"
+        stroke="rgba(0,0,0,0.1)"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <ellipse cx="22" cy="18" rx="6" ry="3.2" fill="#fff" opacity="0.6" transform="rotate(-28 22 18)" />
+    </svg>
+  );
+}
+
 // Drop a 16:9 loop (H.264 MP4, muted, ideally under ~4 MB) at this path and the
 // hero plays it under the blue gradient; until then the gradient stands alone.
 const HERO_VIDEO = '/hero/hero-loop.mp4';
@@ -32,49 +67,44 @@ const HERO_POSTER = '/hero/hero-poster.webp';
 
 const publicFileExists = (p) => fs.existsSync(path.join(process.cwd(), 'public', p));
 
+// Placeholder reviews only render in development; see REVIEWS in homeContent.
+const reviews = REVIEWS.filter((r) => !r.placeholder || process.env.NODE_ENV !== 'production');
+
 export default function Home() {
   const hasVideo = publicFileExists(HERO_VIDEO);
   const hasPoster = publicFileExists(HERO_POSTER);
 
   return (
     <>
-      {/* 1. Hero: 16:9 video loop under a blue gradient */}
+      {/* 1. Hero: what we make, in plain words, over the video loop */}
       <section className={styles.hero}>
         {hasVideo && <HeroVideo src={HERO_VIDEO} poster={hasPoster ? HERO_POSTER : undefined} />}
         <div className={styles.heroShade} aria-hidden="true" />
         <div className={styles.heroTexture} aria-hidden="true" />
         <div className={styles.heroInner}>
           <p className={`${styles.eyebrow} ${styles.eyebrowLight} ${styles.heroEyebrow}`}>
-            Churned fresh in Lalitpur
+            Blue Mont Dairy · Lalitpur
           </p>
           <h1 className={styles.heroTitle}>
-            <span className={styles.heroLine}>Freeze the moment with</span>
-            <Image
-              src="/brand/logo/wordmark.webp"
-              alt="Baeley's"
-              width={960}
-              height={440}
-              sizes="(max-width: 640px) 70vw, 380px"
-              className={styles.heroWordmark}
-              preload
-            />
+            <span className={styles.heroLine}>Premium ice cream</span>
+            <span className={`${styles.heroLine} ${styles.heroAccent}`}>&amp; kulfi for Nepal</span>
           </h1>
           <p className={styles.heroText}>
-            Twenty years of Lalitpur dairy, churned into monster-sized treats. Real moments happen when we take
-            the time to treat ourselves.
+            One of Nepal&apos;s leading ice cream and kulfi makers. Top Kulfi, Baeley&apos;s and Blissberry give
+            you premium quality at a price that makes sense, every day.
           </p>
           <div className={`${styles.btnRow} ${styles.heroCtas}`}>
             <Link href="/products" className={`${styles.btn} ${styles.btnYellow} ${styles.btnLg}`}>
-              Explore treats <Arrow />
+              Explore products <Arrow />
             </Link>
-            <Link href="/partner" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
-              Stock us in your store
+            <Link href="/#brands" className={`${styles.btn} ${styles.btnGhost} ${styles.btnLg}`}>
+              Our brands
             </Link>
           </div>
           <ul className={styles.heroTrust}>
-            <li><Check /> 20 years of dairy</li>
+            <li><Check /> 20 years in Lalitpur</li>
+            <li><Check /> 12+ districts &amp; cities</li>
             <li><Check /> DFTQC-compliant</li>
-            <li><Check /> Treats from Rs 20</li>
           </ul>
         </div>
 
@@ -86,6 +116,15 @@ export default function Home() {
           height={900}
           sizes="(max-width: 640px) 34vw, 240px"
           className={styles.heroMascot}
+        />
+        <Image
+          src="/brand/products/kulfi-chocodip.webp"
+          alt=""
+          aria-hidden="true"
+          width={293}
+          height={900}
+          sizes="(max-width: 640px) 20vw, 110px"
+          className={styles.heroKulfi}
         />
         <Image
           src="/brand/mascots/butterscotch.webp"
@@ -105,8 +144,8 @@ export default function Home() {
             <p className={styles.eyebrow}>Fresh in the freezer</p>
             <h2 id="fav-title" className={styles.heading}>Our latest favourites</h2>
             <p>
-              The newest from Baeley&apos;s and Blissberry. Grab one on the way home, or make them part of your
-              freezer rotation.
+              Kulfi, Kulfusion and ice cream from Top Kulfi, Baeley&apos;s and Blissberry. Grab one on the way
+              home, or make them part of your freezer rotation.
             </p>
             <div className={styles.btnRow}>
               <Link href="/products" className={`${styles.btn} ${styles.btnBlue}`}>
@@ -120,81 +159,72 @@ export default function Home() {
 
           <Carousel label="favourite products" className={styles.favCarousel} trackClassName={styles.favTrack}>
             {FAVORITES.map((p) => (
-              <li key={p.name} className={styles.favItem}>
+              <li key={`${p.brand}-${p.name}`} className={styles.favItem}>
                 <div className={styles.favImgWrap}>
                   <span className={styles.favPlate} aria-hidden="true" />
-                  <Image src={p.image} alt="" width={p.w} height={p.h} sizes="150px" className={styles.favImg} />
+                  <Image
+                    src={p.image}
+                    alt={`${p.brand} ${p.name} ${p.type.toLowerCase()}`}
+                    width={p.w}
+                    height={p.h}
+                    sizes="150px"
+                    className={styles.favImg}
+                  />
                 </div>
-                <p className={styles.favTag}>{p.tag}</p>
+                <p className={styles.favTag}>{p.type}</p>
                 <h3 className={styles.favName}>{p.name}</h3>
-                <p className={styles.favPrice}>{p.price}</p>
+                {p.price && <p className={styles.favPrice}>{p.price}</p>}
               </li>
             ))}
           </Carousel>
         </div>
       </section>
 
-      {/* 3. Real moments */}
-      <section className={styles.moments}>
+      {/* 3. Value for money */}
+      <section id="value" className={styles.moments}>
         <div className={`container ${styles.momentsGrid}`}>
-          <div className={styles.momentsArt} data-reveal>
-            <div className={`${styles.tile} ${styles.tileYellow}`}>
-              <Image
-                src="/brand/products/sundae-strawberry.webp"
-                alt="Baeley's Super Sundae, strawberry"
-                width={486}
-                height={900}
-                sizes="120px"
-                className={styles.tileProduct}
-              />
-              <Image
-                src="/brand/products/cone-chocolate.webp"
-                alt="Baeley's chocolate Monstro Cone"
-                width={340}
-                height={888}
-                sizes="90px"
-                className={styles.tileProductSmall}
-              />
-            </div>
-            <div className={`${styles.tile} ${styles.tileBlue}`}>
-              <Image
-                src="/brand/mascots/group-scene.webp"
-                alt="The Baeley's monsters piled up around a heap of ice cream"
-                width={1086}
-                height={900}
-                sizes="(max-width: 640px) 60vw, 300px"
-                className={styles.tileScene}
-              />
-            </div>
+          <div className={styles.valueArt} data-reveal>
+            <ul className={styles.valueShelf}>
+              {VALUE_PICKS.map((v) => (
+                <li key={v.name}>
+                  <Image src={v.image} alt={v.alt} width={v.w} height={v.h} sizes="140px" className={styles.valueImg} />
+                  <span className={styles.valueTag}>
+                    {v.name}
+                    <strong>{v.price}</strong>
+                  </span>
+                </li>
+              ))}
+            </ul>
             <Image
               src="/brand/mascots/yeti-wave.webp"
               alt=""
               aria-hidden="true"
               width={840}
               height={900}
-              sizes="140px"
-              className={styles.momentsMascot}
+              sizes="110px"
+              className={styles.valueMascot}
             />
           </div>
 
           <div className={styles.momentsText} data-reveal style={{ '--reveal-delay': '120ms' }}>
-            <p className={styles.eyebrow}>Made for sharing</p>
-            <h2 className={styles.heading}>Here for the real moments</h2>
+            <p className={styles.eyebrow}>Value for money</p>
+            <h2 className={styles.heading}>Premium taste, honest price</h2>
             <p>
-              The best memories aren&apos;t planned. They happen after school, on a hot Kathmandu afternoon, or
-              when the whole family crowds round one tub.
+              Good ice cream shouldn&apos;t be a luxury. We make ours with real milk and premium care, then price
+              it for Nepal, so a treat is something you have any day, not only on special ones.
             </p>
-            <p>
-              Baeley&apos;s is built for those moments: big flavours, a monster on every pack, and a price that
-              starts at Rs 20.
-            </p>
+            <ul className={styles.valueList}>
+              {VALUE_POINTS.map((v) => (
+                <li key={v}><span className={styles.checkDot}><Check /></span>{v}</li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
       {/* 3b. Numbers strip */}
-      <section className={styles.stats} aria-label="Blue Mont Dairy in numbers">
-        <ul className={`container ${styles.statsList}`}>
+      <section className={`container ${styles.stats}`} aria-label="Blue Mont Dairy in numbers">
+        <ul className={styles.statsList}>
           {STATS.map((st, i) => (
             <li key={st.label} data-reveal style={{ '--reveal-delay': `${i * 90}ms` }}>
               <p className={styles.statValue}>
@@ -207,12 +237,95 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* 4. Quality split */}
+      {/* 4. Top Kulfi: where Blue Mont started */}
+      <section id="top-kulfi" className={styles.kulfi} aria-labelledby="kulfi-title">
+        <div className={`container ${styles.kulfiInner}`}>
+          <div className={styles.kulfiText} data-reveal>
+            <Image
+              src="/brand/logo/top-kulfi-wordmark.webp"
+              alt="Top Kulfi"
+              width={960}
+              height={690}
+              sizes="220px"
+              className={styles.kulfiLogo}
+            />
+            <p className={`${styles.eyebrow} ${styles.eyebrowLight}`}>Where it all started</p>
+            <h2 id="kulfi-title" className={styles.kulfiHeading}>The kulfi everybody knows</h2>
+            <p>
+              Ask anyone about the Rs 10 and Rs 20 kulfi, or the titaura one from the shop down the road. That&apos;s
+              Top Kulfi, and it&apos;s where Blue Mont Dairy began. Everything we make today is built on the same
+              idea: good milk at a fair price.
+            </p>
+            <Link href="/products?brand=topkulfi" className={`${styles.btn} ${styles.btnYellow}`}>
+              See Top Kulfi <Arrow />
+            </Link>
+          </div>
+          <ul className={styles.kulfiShelf} aria-label="Top Kulfi range">
+            {TOP_KULFI.map((k, i) => (
+              <li key={k.name} data-reveal style={{ '--reveal-delay': `${i * 60}ms`, '--s': k.h / 900 }}>
+                <Image
+                  src={k.image}
+                  alt={`Top Kulfi ${k.name}`}
+                  width={k.w}
+                  height={k.h}
+                  sizes="120px"
+                  className={styles.kulfiImg}
+                />
+                <span>{k.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 5. All brands. Each entry in BRANDS is a card, so new categories slot in. */}
+      <section id="brands" className={styles.brands} aria-labelledby="brands-title">
+        <div className="container">
+          <div className={styles.brandsHead} data-reveal>
+            <p className={styles.eyebrow}>Our family of brands</p>
+            <h2 id="brands-title" className={styles.heading}>One dairy, many favourites</h2>
+            <p>
+              For about 20 years Blue Mont Dairy has made frozen desserts in Lalitpur. Today that means kulfi,
+              Kulfusion and ice cream under three brands.
+            </p>
+          </div>
+          <ul className={styles.brandGrid}>
+            {BRANDS.map((b, i) => (
+              <li key={b.slug} className={styles.brandCard} data-reveal style={{ '--reveal-delay': `${i * 90}ms` }}>
+                <div className={styles.brandArt} style={{ background: b.tint }}>
+                  <Image
+                    src={b.image.src}
+                    alt={b.image.alt}
+                    width={b.image.w}
+                    height={b.image.h}
+                    sizes="140px"
+                    className={styles.brandProduct}
+                  />
+                </div>
+                <div className={styles.brandBody}>
+                  {b.logo ? (
+                    <Image src={b.logo.src} alt={b.name} width={b.logo.w} height={b.logo.h} sizes="160px" className={styles.brandLogo} />
+                  ) : (
+                    <p className={styles.brandName}>{b.name}</p>
+                  )}
+                  <p className={styles.brandCategory}>{b.category}</p>
+                  <p className={styles.brandText}>{b.text}</p>
+                  <Link href={`/products?brand=${b.slug}`} className={styles.brandLink}>
+                    See {b.name} <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 6. Quality split */}
       <section id="quality" className={styles.split}>
         <div className={styles.splitArt}>
           <Image
             src="/brand/products/tub-box.webp"
-            alt="Baeley's tub box"
+            alt="Baeley's ice cream tub box"
             width={708}
             height={900}
             sizes="(max-width: 820px) 40vw, 240px"
@@ -234,65 +347,24 @@ export default function Home() {
             Proudly made in <span className={styles.splitAccent}>Lalitpur</span>
           </h2>
           <p>
-            Every batch is standardised, hygienically handled and made to DFTQC requirements in our own
-            Lalitpur factory, then kept frozen along an unbroken cold chain until it reaches your freezer.
+            Every batch of ice cream and kulfi is standardised, hygienically handled and made to DFTQC
+            requirements in our own Lalitpur factory, then kept frozen along an unbroken cold chain until it
+            reaches your freezer.
           </p>
-          <ul className={styles.checkList}>
-            {QUALITY_POINTS.map((q) => (
-              <li key={q}><span className={styles.checkDot}><Check /></span>{q}</li>
-            ))}
-          </ul>
           <Link href="/products" className={`${styles.btn} ${styles.btnYellow}`}>
             See the range <Arrow />
           </Link>
         </div>
       </section>
 
-      {/* 5. Our story */}
-      <section id="story" className={styles.story}>
-        <div className={`container ${styles.storyGrid}`}>
-          <div className={styles.storyText} data-reveal>
-            <p className={styles.eyebrow}>Since day one</p>
-            <h2 className={styles.heading}>Our story</h2>
-            <p>
-              For about 20 years Blue Mont Dairy has been making frozen desserts for the Kathmandu Valley. Today
-              that heritage lives in three brands: playful <strong>Baeley&apos;s</strong>, the{' '}
-              <strong>Blissberry</strong> Kulfusion line that blends traditional kulfi with modern flavours, and{' '}
-              <strong>Top Kulfi</strong>, our classic Khuwa kulfi and fruit popsicles.
-            </p>
-            <Link href="/products" className={`${styles.btn} ${styles.btnBlue}`}>
-              Meet the brands <Arrow />
-            </Link>
-          </div>
-          <div className={styles.storyOval} data-reveal style={{ '--reveal-delay': '120ms' }}>
-            <Image
-              src="/brand/products/family-pack-1000ml.webp"
-              alt="Baeley's 1000 ml family pack"
-              width={729}
-              height={833}
-              sizes="(max-width: 820px) 50vw, 240px"
-              className={styles.storyProduct}
-            />
-            <Image
-              src="/brand/products/blissberry-blueberry.webp"
-              alt="Blissberry Kulfusion blueberry stick"
-              width={347}
-              height={900}
-              sizes="90px"
-              className={styles.storyStick}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Meet the monsters */}
+      {/* 7. Meet the monsters, each with their scoop */}
       <section className={styles.monsters} aria-labelledby="monsters-title">
         <div className="container">
           <div className={styles.monstersHead}>
             <div data-reveal>
               <p className={styles.eyebrow}>The Baeley&apos;s crew</p>
               <h2 id="monsters-title" className={styles.heading}>Meet the monsters</h2>
-              <p>Every Baeley&apos;s flavour has a monster of its own. Which one are you?</p>
+              <p>Every Baeley&apos;s ice cream flavour has a monster of its own. Which one are you?</p>
             </div>
             <span className={styles.yum} aria-hidden="true">YUMMM!</span>
           </div>
@@ -302,6 +374,7 @@ export default function Home() {
               <li key={m.name} className={styles.monsterCard}>
                 <div className={styles.monsterImgWrap} style={{ background: m.tint }}>
                   <Image src={m.image} alt="" width={m.w} height={m.h} sizes="220px" className={styles.monsterImg} />
+                  <Scoop color={m.scoop} />
                 </div>
                 <div className={styles.monsterLabel}>
                   <h3>{m.name}</h3>
@@ -312,17 +385,41 @@ export default function Home() {
           </Carousel>
 
           <div className={styles.center}>
-            <Link href="/products" className={`${styles.btn} ${styles.btnBlue}`}>
+            <Link href="/products?brand=baeleys" className={`${styles.btn} ${styles.btnBlue}`}>
               Find your flavour <Arrow />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 7. Latest scoop: follow along */}
-      <section className={styles.scoop} aria-labelledby="scoop-title">
+      {/* 8. Reviews (left out until there are real ones) */}
+      {reviews.length > 0 && (
+        <section className={styles.reviews} aria-labelledby="reviews-title">
+          <div className="container">
+            <div className={styles.reviewsHead} data-reveal>
+              <p className={styles.eyebrow}>What people say</p>
+              <h2 id="reviews-title" className={styles.heading}>Loved across Nepal</h2>
+            </div>
+            <ul className={styles.reviewGrid}>
+              {reviews.map((r, i) => (
+                <li key={i} className={styles.reviewCard} data-reveal style={{ '--reveal-delay': `${i * 90}ms` }}>
+                  <span className={styles.reviewMark} aria-hidden="true">“</span>
+                  <blockquote>{r.quote}</blockquote>
+                  <p className={styles.reviewWho}>
+                    <strong>{r.name}</strong>
+                    {r.place && <span>{r.place}</span>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {/* 9. Latest scoop: follow along */}
+      <section className={styles.scoopBand} aria-labelledby="scoop-title">
         <div className={`container ${styles.scoopInner}`} data-reveal>
-          <Image src="/brand/logo/badge.webp" alt="" width={600} height={600} sizes="96px" className={styles.scoopBadge} />
+          <Image src="/brand/logo/bluemont-white.webp" alt="" width={439} height={354} sizes="96px" className={styles.scoopBadge} />
           <div className={styles.scoopText}>
             <h2 id="scoop-title" className={styles.heading}>Get the latest scoop</h2>
             <p>New flavours, freezer drops and monster sightings land on our socials first.</p>
@@ -348,37 +445,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8. B2B partner band */}
+      {/* 10. Short pointer for shops; the full pitch lives on /partner */}
       <section className={styles.partner} aria-labelledby="partner-title">
         <div className={`container ${styles.partnerInner}`}>
           <div className={styles.partnerText} data-reveal>
-            <p className={styles.eyebrow}>For retailers</p>
+            <p className={styles.eyebrow}>For shops, cafés &amp; canteens</p>
             <h2 id="partner-title" className={styles.heading}>Want us in your place?</h2>
             <p>
-              Marts, kiranas, cafés, bakeries and school canteens across the valley stock Baeley&apos;s. Qualifying
-              partners get a branded deep freezer.
+              Join the shops across 12+ districts and cities that keep Top Kulfi, Baeley&apos;s and Blissberry in
+              their freezers. We&apos;d love to have you in the Blue Mont family.
             </p>
-            <ul className={styles.partnerPoints}>
-              {PARTNER_POINTS.map((pt) => (
-                <li key={pt.title}>
-                  <strong>{pt.title}</strong>
-                  <span>{pt.text}</span>
-                </li>
-              ))}
-            </ul>
-            <div className={styles.btnRow}>
-              <Link href="/partner" className={`${styles.btn} ${styles.btnYellow}`}>
-                Apply for a freezer <Arrow />
-              </Link>
-              <a
-                href={whatsappUrl("Hi Blue Mont, I would like to stock Baeley's in my store.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.btn} ${styles.btnBlue}`}
-              >
-                WhatsApp sales <Arrow />
-              </a>
-            </div>
+            <Link href="/partner" className={`${styles.btn} ${styles.btnYellow}`}>
+              Become a partner <Arrow />
+            </Link>
           </div>
           <Image
             src="/brand/mascots/yeti-jump.webp"
