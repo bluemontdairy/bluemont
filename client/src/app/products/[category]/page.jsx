@@ -22,14 +22,16 @@ export async function generateMetadata({ params }) {
   const { category } = await findCategory(slug);
   if (!category) return { title: 'Not found', robots: { index: false } };
 
-  const title = category.seoTitle || `${category.name} — Blue Mont Dairy`;
+  const title = category.seoTitle || `${category.name} Prices in Nepal (MRP)`;
   const description =
-    category.seoDescription || category.description.slice(0, 160) || `${category.name} from Blue Mont Dairy, with MRP in NPR.`;
+    category.seoDescription ||
+    category.description.slice(0, 160) ||
+    `${category.name} from Top Kulfi, Baeley's and Blissberry by Blue Mont Dairy, with the MRP of every pack and wholesale supply for shops.`;
   return {
     title: { absolute: `${title} | Blue Mont Dairy` },
     description,
     alternates: { canonical: `/products/${category.slug}` },
-    ...pageSocial({ title, description, path: `/products/${category.slug}`, media: await getSiteMedia() }),
+    ...pageSocial({ title: `${title} | Blue Mont Dairy`, description, path: `/products/${category.slug}`, media: await getSiteMedia(), image: 'products' }),
   };
 }
 

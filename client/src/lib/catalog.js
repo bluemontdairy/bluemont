@@ -30,6 +30,7 @@ const serializeCategory = (c) => ({
   seoDescription: c.seoDescription || '',
   isActive: c.isActive !== false,
   sortOrder: c.sortOrder || 0,
+  updatedAt: c.updatedAt ? new Date(c.updatedAt).toISOString() : null,
 });
 
 const serializeProduct = (p, categoriesById) => {
@@ -53,6 +54,7 @@ const serializeProduct = (p, categoriesById) => {
     featured: !!p.featured,
     isActive: p.isActive !== false,
     sortOrder: p.sortOrder || 0,
+    updatedAt: p.updatedAt ? new Date(p.updatedAt).toISOString() : null,
   };
 };
 
@@ -72,7 +74,7 @@ async function loadCatalog({ includeHidden }) {
 }
 
 // Public pages read through the cache; admin changes call revalidateTag.
-const cachedPublicCatalog = unstable_cache(() => loadCatalog({ includeHidden: false }), ['public-catalog-v2'], {
+const cachedPublicCatalog = unstable_cache(() => loadCatalog({ includeHidden: false }), ['public-catalog-v3'], {
   tags: [CATALOG_TAG],
   revalidate: 3600,
 });

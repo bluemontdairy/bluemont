@@ -9,7 +9,7 @@
 // encrypted and never sent to the browser.
 
 export const SETTINGS_GROUPS = [
-  { id: 'site', title: 'Site address', note: 'The website’s public address. Used for links in emails, password links, Google and social sharing.' },
+  { id: 'site', title: 'Site address', note: 'The website’s public address, used for links in emails, password links, Google and social sharing, and the codes that prove to Google and Bing that you own it.' },
   { id: 'contact', title: 'Contact', note: 'Shown in the footer and used by every “Chat on WhatsApp” button.' },
   { id: 'social', title: 'Social media', note: 'Full links to your pages. An icon only appears on the website when its link is filled in.' },
   { id: 'notifications', title: 'Email notifications', note: 'Who gets an email when a shop applies or someone sends a message.' },
@@ -20,6 +20,8 @@ export const SETTINGS_GROUPS = [
 export const SETTINGS_FIELDS = [
   // Site address
   { key: 'siteUrl', group: 'site', label: 'Website address', type: 'siteurl', placeholder: 'https://bluemont.com.np', hint: 'Starts with https:// (http://localhost:3000 while developing). Until it’s set, the address the site is visited on is used.' },
+  { key: 'googleVerification', group: 'site', label: 'Google Search Console code', type: 'text', max: 200, placeholder: 'abc123…', hint: 'Optional. From Search Console → Add property → HTML tag. Paste the code or the whole <meta> tag.' },
+  { key: 'bingVerification', group: 'site', label: 'Bing Webmaster code', type: 'text', max: 200, placeholder: 'ABC123…', hint: 'Optional. From Bing Webmaster Tools → HTML meta tag. Paste the code or the whole <meta> tag.' },
 
   // Contact
   { key: 'whatsappNumber', group: 'contact', label: 'WhatsApp number', type: 'whatsapp', placeholder: '9779851065362', hint: 'Country code + number, digits only (Nepal: 977…). Every WhatsApp button opens a chat with this number.' },

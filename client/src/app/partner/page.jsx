@@ -1,19 +1,22 @@
 import PartnerForm from './PartnerForm';
 import PageHero from '../../components/PageHero';
 import styles from './page.module.css';
-import { pageSocial } from '../../lib/site';
+import { jsonLd, pageSocial } from '../../lib/site';
 import { getSiteMedia } from '../../lib/siteMedia';
+import { getSiteInfo } from '../../lib/siteSettings';
+import { breadcrumbJsonLd } from '../../lib/catalogJsonLd';
 
 export const generateMetadata = async () => ({
-  title: 'Stock Our Ice Cream — Free Branded Deep Freezer for Shops',
+  title: 'Stock Blue Mont Ice Cream in Your Shop',
   description:
-    "Stock Top Kulfi, Baeley's ice cream and Blissberry Kulfusion in your shop, kirana, cafe, bakery or canteen. Branded deep freezer placement, scheduled cold-chain restocking and POS support from Blue Mont Dairy.",
+    "Stock Top Kulfi, Baeley's and Blissberry in your shop, kirana, café or canteen. Branded freezers for qualifying partners, cold-chain restocks and POS support.",
   alternates: { canonical: '/partner' },
   ...pageSocial({
-    title: 'Want Blue Mont ice cream in your place?',
-    description: 'Branded deep freezers, a range customers already ask for, and scheduled cold-chain restock for Blue Mont retail partners.',
+    title: 'Stock Blue Mont ice cream & kulfi in your shop',
+    description: 'Branded freezers, a range customers already ask for, and scheduled cold-chain restocks for Blue Mont retail partners.',
     path: '/partner',
     media: await getSiteMedia(),
+    image: 'partner',
   }),
 });
 
@@ -42,7 +45,7 @@ const VALUE_POINTS = [
 ];
 
 export default async function PartnerPage() {
-  const media = await getSiteMedia();
+  const [media, info] = await Promise.all([getSiteMedia(), getSiteInfo()]);
   return (
     <div className={styles.page}>
       <PageHero eyebrow="For shops, cafés & canteens" title="Want us in your place?" mascot={media['home.partner-mascot']}>
@@ -74,6 +77,11 @@ export default async function PartnerPage() {
           <PartnerForm />
         </section>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbJsonLd([['Home', '/'], ['Become a partner', '/partner']], info.siteUrl)) }}
+      />
     </div>
   );
 }

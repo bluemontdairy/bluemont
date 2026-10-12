@@ -7,9 +7,9 @@ import { getSiteMedia } from '../../lib/siteMedia';
 import { jsonLd, pageSocial } from '../../lib/site';
 import { breadcrumbJsonLd, productListJsonLd } from '../../lib/catalogJsonLd';
 
-const TITLE = "Ice Cream & Kulfi Price List (MRP) — Baeley's, Blissberry & Top Kulfi";
+const TITLE = 'Ice Cream & Kulfi Prices in Nepal (MRP)';
 const DESCRIPTION =
-  "Full Blue Mont Dairy catalog with MRP in NPR: Baeley's cones, cups, sundaes, bars, 500 ml and 1 litre tubs and bulk tub boxes, Blissberry Kulfusion sticks and Top Kulfi. Wholesale supply across Nepal.";
+  "MRP for every Top Kulfi, Baeley's and Blissberry pack: kulfi, cones, cups, sundaes, bars, Kulfusion and family tubs. Wholesale supply for shops across Nepal.";
 
 export async function generateMetadata() {
   return {
@@ -17,10 +17,11 @@ export async function generateMetadata() {
     description: DESCRIPTION,
     alternates: { canonical: '/products' },
     ...pageSocial({
-      title: "Ice Cream & Kulfi Price List — Baeley's, Blissberry & Top Kulfi",
-      description: "MRP for every Baeley's, Blissberry and Top Kulfi pack, plus wholesale supply across Nepal.",
+      title: 'Ice cream & kulfi price list | Blue Mont Dairy',
+      description: "MRP for every Top Kulfi, Baeley's and Blissberry pack, plus wholesale supply for shops across Nepal.",
       path: '/products',
       media: await getSiteMedia(),
+      image: 'products',
     }),
   };
 }

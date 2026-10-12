@@ -45,7 +45,7 @@ export const SITE_MEDIA_SLOTS = [
   // Backgrounds & sharing
   { key: 'texture.swirl', group: 'Backgrounds & sharing', label: 'Swirl texture', hint: 'Faint repeating pattern on the yellow and blue bands. Small tile, around 300–400 px wide.', fallback: '/brand/texture-swirl.webp', w: 376, h: 282 },
   { key: 'intro.fill', group: 'Backgrounds & sharing', label: 'Intro animation fill', hint: 'Photo shown inside the giant letters of the opening animation.', fallback: '/hero/intro-fill.jpg', w: 1600, h: 900 },
-  { key: 'share.image', group: 'Backgrounds & sharing', label: 'Social share image', hint: 'Preview shown when the site is shared on Facebook, WhatsApp etc. 1200 × 630.', fallback: '/og.jpg', w: 1200, h: 630 },
+  { key: 'share.image', group: 'Backgrounds & sharing', label: 'Social share image', hint: 'Preview shown when a link is shared on WhatsApp, Facebook, Messenger, X etc. 1200 × 630. Leave on the built-in images to get a separate one for the homepage, products and partner pages; an upload replaces all three.', fallback: '/og.jpg', w: 1200, h: 630 },
 ];
 
 export const SLOT_KEYS = new Set(SITE_MEDIA_SLOTS.map((s) => s.key));

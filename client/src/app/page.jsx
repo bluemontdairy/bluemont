@@ -13,7 +13,7 @@ import { brandLabel, formatMrp } from '../lib/brands';
 import { cldTransform, videoPoster } from '../lib/media';
 
 export const metadata = {
-  title: { absolute: "Blue Mont Dairy | Ice Cream & Kulfi in Nepal: Top Kulfi, Baeley's, Blissberry" },
+  title: { absolute: 'Blue Mont Dairy | Ice Cream & Kulfi Maker in Nepal' },
   alternates: { canonical: '/' },
 };
 

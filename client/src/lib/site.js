@@ -8,8 +8,9 @@ export const SITE = {
   name: 'Blue Mont Dairy',
   legalName: 'Blue Mont Dairy Pvt. Ltd.',
   tagline: "Ice cream & kulfi from Lalitpur, Nepal: Top Kulfi, Baeley's & Blissberry",
+  // Meta description and the default share text: about 155 characters.
   description:
-    "Blue Mont Dairy is a Lalitpur ice cream and kulfi maker with 20 years of heritage, making Top Kulfi, Baeley's ice cream and Blissberry Kulfusion. Premium quality at an honest price, sold in 12+ districts and cities across Nepal.",
+    "Blue Mont Dairy makes Top Kulfi, Baeley's ice cream and Blissberry Kulfusion in Lalitpur. Premium ice cream and kulfi at honest prices in 12+ districts.",
   foundingYear: 2006, // TODO: confirm (scope says ~20 years of operation)
   phone: '',
   whatsapp: '',
@@ -27,18 +28,24 @@ export const SITE = {
   brands: ['Top Kulfi', "Baeley's", 'Blissberry'],
 };
 
-const SHARE_ALT = 'Ice cream and kulfi by Blue Mont Dairy, Lalitpur';
+// Built-in share images (scripts/generate-brand-assets.mjs), one per page
+// type. 1200 × 630 JPEGs, under WhatsApp's ~300 KB limit for a large preview.
+export const SHARE_IMAGES = {
+  home: { url: '/og.jpg', alt: "Blue Mont Dairy: premium ice cream and kulfi for Nepal. Top Kulfi, Baeley's and Blissberry." },
+  products: { url: '/og-products.jpg', alt: 'Blue Mont Dairy ice cream and kulfi price list (MRP)' },
+  partner: { url: '/og-partner.jpg', alt: 'Stock Blue Mont ice cream and kulfi in your shop' },
+};
 
 /**
- * Open Graph image entry from the "share.image" site media slot (Admin →
- * Site images). Cloudinary crops it to 1200 × 630 as a JPEG, which every
- * social network accepts.
+ * Open Graph image entries. An image uploaded in Admin → Site images →
+ * "Social share image" wins everywhere (Cloudinary crops it to 1200 × 630
+ * JPEG); otherwise the page's own built-in image is used.
  */
-export const shareImage = (media) => {
+export const shareImage = (media, page = 'home') => {
   const img = media?.['share.image'];
-  if (!img) return [];
-  const url = img.uploaded ? cldTransform(img.src, 'c_fill,g_auto,w_1200,h_630,f_jpg,q_auto') : img.src;
-  return [{ url, width: 1200, height: 630, alt: SHARE_ALT }];
+  const own = SHARE_IMAGES[page] || SHARE_IMAGES.home;
+  const url = img?.uploaded ? cldTransform(img.src, 'c_fill,g_auto,w_1200,h_630,f_jpg,q_auto') : own.url;
+  return [{ url, width: 1200, height: 630, alt: own.alt, type: 'image/jpeg' }];
 };
 
 export const SEO_KEYWORDS = [
@@ -66,9 +73,10 @@ export const PUBLIC_ROUTES = [
 
 // Next.js replaces (doesn't merge) a parent's openGraph/twitter objects, so
 // every page builds both through this helper to keep the share image.
-// `media` is the result of getSiteMedia() (for the share image).
-export const pageSocial = ({ title, description, path, media }) => {
-  const images = shareImage(media);
+// `media` is the result of getSiteMedia(); `image` picks the built-in share
+// image (a key of SHARE_IMAGES).
+export const pageSocial = ({ title, description, path, media, image = 'home' }) => {
+  const images = shareImage(media, image);
   return {
     openGraph: {
       type: 'website',
@@ -79,7 +87,7 @@ export const pageSocial = ({ title, description, path, media }) => {
       description,
       images,
     },
-    twitter: { card: 'summary_large_image', title, description, images: images.map((i) => i.url) },
+    twitter: { card: 'summary_large_image', title, description, images },
   };
 };
 
@@ -100,7 +108,13 @@ export const organizationJsonLd = (media, info) => ({
   legalName: info.legalName,
   description: SITE.description,
   url: info.siteUrl,
-  logo: absoluteMediaUrl(media['logo.bluemont-tile']?.src, info.siteUrl),
+  alternateName: ['Blue Mont', 'Bluemont Dairy'],
+  logo: {
+    '@type': 'ImageObject',
+    url: absoluteMediaUrl(media['logo.bluemont-tile']?.src, info.siteUrl),
+    width: media['logo.bluemont-tile']?.w,
+    height: media['logo.bluemont-tile']?.h,
+  },
   image: absoluteMediaUrl(shareImage(media)[0]?.url, info.siteUrl),
   ...(info.phone && { telephone: info.phone }),
   ...(info.email && { email: info.email }),
@@ -119,4 +133,17 @@ export const organizationJsonLd = (media, info) => ({
       availableLanguage: ['en', 'ne'],
     },
   ],
+});
+
+// Tells Google the site's name ("Blue Mont Dairy" above the result, rather
+// than the bare domain) and who publishes it.
+export const websiteJsonLd = (info) => ({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${info.siteUrl}/#website`,
+  name: SITE.name,
+  alternateName: ['Blue Mont', 'Bluemont Dairy'],
+  url: info.siteUrl,
+  inLanguage: 'en-NP',
+  publisher: { '@id': `${info.siteUrl}/#organization` },
 });

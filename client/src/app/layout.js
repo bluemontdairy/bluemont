@@ -6,9 +6,9 @@ import WhatsAppButton from "../components/WhatsAppButton";
 import Intro from "../components/Intro";
 import ScrollReveal from "../components/ScrollReveal";
 import PublicChrome from "../components/PublicChrome";
-import { SITE, SEO_KEYWORDS, jsonLd, organizationJsonLd, shareImage } from "../lib/site";
+import { SITE, SEO_KEYWORDS, jsonLd, organizationJsonLd, pageSocial, websiteJsonLd } from "../lib/site";
 import { getSiteMedia } from "../lib/siteMedia";
-import { getSiteInfo } from "../lib/siteSettings";
+import { getSiteInfo, isSecondaryHost } from "../lib/siteSettings";
 import { cldTransform } from "../lib/media";
 
 // The public site uses two faces: Lilita One for headings and Nunito for
@@ -19,67 +19,73 @@ const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", preload: false });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", preload: false });
 
-// Site-wide SEO defaults; pages override title/description/canonical.
+// Site-wide SEO defaults; pages override title, description, canonical and
+// share image. Titles stay under ~60 characters and descriptions under ~160
+// so Google shows them whole.
+const DEFAULT_TITLE = "Blue Mont Dairy | Ice Cream & Kulfi Maker in Nepal";
+const SHARE_TITLE = "Blue Mont Dairy: premium ice cream & kulfi for Nepal";
+
 const baseMetadata = {
-  title: {
-    default: "Blue Mont Dairy | Ice Cream & Kulfi in Nepal: Top Kulfi, Baeley's, Blissberry",
-    template: "%s | Blue Mont Dairy",
-  },
-  description: "Blue Mont Dairy is one of Nepal's leading ice cream and kulfi makers: Top Kulfi, Baeley's ice cream and Blissberry Kulfusion, made in Lalitpur for 20 years and sold in 12+ districts and cities. Premium quality at an honest price.",
+  title: { default: DEFAULT_TITLE, template: "%s | Blue Mont Dairy" },
+  description: SITE.description,
   keywords: SEO_KEYWORDS,
   applicationName: SITE.name,
-  authors: [{ name: SITE.legalName }],
-  creator: SITE.legalName,
-  publisher: SITE.legalName,
   category: "food",
   alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: "en_NP",
-    siteName: SITE.name,
-    url: "/",
-    title: "Blue Mont Dairy: ice cream & kulfi from Nepal",
-    description: SITE.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Blue Mont Dairy: ice cream & kulfi from Nepal",
-    description: SITE.description,
-  },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
+  // iOS: "Add to Home Screen" opens full screen, with this name under the icon.
+  appleWebApp: { capable: true, title: "Blue Mont", statusBarStyle: "default" },
+  // Stops iOS Safari turning prices and numbers into phone links.
+  formatDetection: { telephone: false, email: false, address: false },
   other: {
     "geo.region": "NP-BA",
     "geo.placename": "Lalitpur",
-    "geo.position": `${SITE.geo.latitude};${SITE.geo.longitude}`,
-    ICBM: `${SITE.geo.latitude}, ${SITE.geo.longitude}`,
+    "msapplication-TileColor": "#2D6BB2",
   },
 };
 
-// The share image is a site media slot, so it can change from the admin panel.
+const INDEX = {
+  index: true,
+  follow: true,
+  googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+};
+const NO_INDEX = { index: false, follow: false, googleBot: { index: false, follow: false } };
+
+// The share image and business details are editable in the admin panel, so
+// they are read per request.
 export async function generateMetadata() {
   const [media, info] = await Promise.all([getSiteMedia(), getSiteInfo()]);
-  const images = shareImage(media);
+  const social = pageSocial({ title: SHARE_TITLE, description: SITE.description, path: "/", media });
+  const { google, bing } = info.verification;
   return {
     ...baseMetadata,
     metadataBase: new URL(info.siteUrl),
-    authors: [{ name: info.legalName }],
+    authors: [{ name: info.legalName, url: info.siteUrl }],
     creator: info.legalName,
     publisher: info.legalName,
+    // Copies of the site on other addresses (*.vercel.app) stay out of search.
+    robots: (await isSecondaryHost(info.siteUrl)) ? NO_INDEX : INDEX,
+    ...((google || bing) && {
+      verification: { ...(google && { google }), ...(bing && { other: { "msvalidate.01": bing } }) },
+    }),
     other: {
       ...baseMetadata.other,
       "geo.position": `${info.geo.latitude};${info.geo.longitude}`,
       ICBM: `${info.geo.latitude}, ${info.geo.longitude}`,
     },
-    openGraph: { ...baseMetadata.openGraph, images },
-    twitter: { ...baseMetadata.twitter, images: images.map((i) => i.url) },
+    ...social,
   };
 }
 
 // CSS background images (in the stylesheets as var(--texture-swirl) etc.).
 const cssUrl = (img) => (img ? `url("${cldTransform(img.src, "f_auto,q_auto")}")` : "none");
 
+// Colours the browser bar on Android Chrome and iOS Safari, and the accent
+// on link previews in Discord and Telegram.
 export const viewport = {
   themeColor: "#2D6BB2",
+  colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default async function RootLayout({ children }) {
@@ -120,7 +126,7 @@ export default async function RootLayout({ children }) {
         <ScrollReveal />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLd(organizationJsonLd(media, info)) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd([organizationJsonLd(media, info), websiteJsonLd(info)]) }}
         />
       </body>
     </html>

@@ -129,5 +129,25 @@ export async function getSiteInfo() {
     social: Object.values(socials).filter(Boolean),
     notifyEmails: s.notifyEmails,
     stats: { years: s.statYears, districts: s.statDistricts, fans: s.statFans },
+    verification: { google: verificationCode(s.googleVerification), bing: verificationCode(s.bingVerification) },
   };
+}
+
+// Admins often paste the whole <meta name="…" content="CODE"> tag; keep the code.
+const verificationCode = (value) => (value?.match(/content=["']([^"']+)["']/)?.[1] || value || '').trim();
+
+/**
+ * True when the page is being served on an address other than the site's
+ * own (a *.vercel.app deployment, a second project). Those copies are kept
+ * out of search results so they don't compete with the real site.
+ */
+export async function isSecondaryHost(siteUrl) {
+  try {
+    const h = await headers();
+    const host = (h.get('x-forwarded-host') || h.get('host') || '').toLowerCase();
+    if (!host || /^(localhost|127\.0\.0\.1|\[::1\])(:|$)/.test(host)) return false;
+    return host !== new URL(siteUrl).host.toLowerCase();
+  } catch {
+    return false;
+  }
 }
