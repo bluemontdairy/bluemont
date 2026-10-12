@@ -192,8 +192,42 @@
 }
 
 @media (max-width: 860px) {
+  .headerWrapper {
+    padding: 10px 12px 0;
+  }
+
+  /* Once the page scrolls, the logo and menu button sit on a frosted pill so
+     the content passing underneath doesn't collide with them. z-index keeps
+     the close button above the open sheet, since backdrop-filter makes the
+     bar its own stacking context. */
   .header {
+    z-index: 3;
     grid-template-columns: auto 1fr auto;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .scrolled {
+    padding-top: 8px;
+  }
+
+  .scrolled .header {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border-color: rgba(45, 107, 178, 0.12);
+    box-shadow: 0 8px 24px rgba(12, 34, 66, 0.12);
+  }
+
+  /* The open sheet has its own dark ground; the bar steps aside for it. */
+  .menuOpen .header {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: transparent;
+    box-shadow: none;
   }
 
   .group {
@@ -202,16 +236,31 @@
 
   .logo,
   .scrolled .logo {
-    width: 68px;
-    height: 68px;
+    width: 64px;
+    height: 64px;
     margin-bottom: 0;
-    padding: 13px 9px;
+    padding: 12px 9px;
     grid-column: 1;
+  }
+
+  .scrolled .logo {
+    width: 52px;
+    height: 52px;
+    padding: 10px 7px;
+    box-shadow: 0 0 0 3px var(--brand-yellow);
   }
 
   .hamburger {
     display: flex;
     grid-column: 3;
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  .scrolled .hamburger {
+    width: 46px;
+    height: 46px;
+    padding: 0 12px;
+    box-shadow: none;
   }
 
   .backdrop {
@@ -245,11 +294,16 @@
     border-radius: 28px 0 0 28px;
     box-shadow: -20px 0 50px rgba(12, 34, 66, 0.35);
     transform: translateX(105%);
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* Hidden once closed, so its shadow doesn't bleed onto the right edge
+       of the page; visibility flips after the slide-out finishes. */
+    visibility: hidden;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s linear 0.35s;
   }
 
   .sheetOpen {
     transform: none;
+    visibility: visible;
+    transition-delay: 0s;
   }
 
   .sheetList {

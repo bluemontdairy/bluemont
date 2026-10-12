@@ -1,49 +1,52 @@
 import { NextResponse } from 'next/server';
-import sharp from 'sharp';
-import connectDB from '../../../lib/db';
-import Media from '../../../models/Media';
-import { protect } from '../../../lib/auth';
-import { handleError, unauthorized } from '../../../lib/apiResponse';
+import { v2 as cloudinary } from 'cloudinary';
+import { authorize } from '../../../lib/auth';
+import { getPrivateConfig } from '../../../lib/siteSettings';
+import { can } from '../../../lib/roles';
+import { denied, forbidden, handleError } from '../../../lib/apiResponse';
 
-const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
-const ACCEPTED = ['image/png', 'image/jpeg', 'image/webp', 'image/avif'];
+// Signs a direct browser → Cloudinary upload. Files never pass through this
+// server, so there is no request size limit to hit (Vercel caps request
+// bodies at ~4.5 MB) and big videos upload fine.
+//
+// The signature pins the folder, the allowed formats and, for images, an
+// incoming resize to at most 2400 px, so a signed request can't be reused to
+// put anything else in the account. Signatures expire after an hour.
 
-// Takes a packshot from the admin panel, converts it to .webp (keeping
-// transparency) at most 900px tall, and stores it in MongoDB.
+const FOLDERS = { product: 'products', category: 'categories', site: 'site', review: 'reviews' };
+const PERMISSION = { product: 'products.edit', category: 'categories.manage', site: 'siteMedia.manage', review: 'reviews.edit' };
+const FORMATS = { image: 'jpg,jpeg,png,webp,avif', video: 'mp4,webm,mov' };
+
 export async function POST(request) {
   try {
-    if (!(await protect(request))) return unauthorized();
+    const auth = await authorize(request);
+    if (!auth.admin) return denied(auth);
 
-    const form = await request.formData();
-    const file = form.get('file');
-    if (!file || typeof file === 'string') {
-      return NextResponse.json({ message: 'Choose an image to upload.' }, { status: 400 });
-    }
-    if (!ACCEPTED.includes(file.type)) {
-      return NextResponse.json({ message: 'Use a PNG, JPG, WebP or AVIF image.' }, { status: 400 });
-    }
-    if (file.size > MAX_UPLOAD_BYTES) {
-      return NextResponse.json({ message: 'Image is larger than 8 MB.' }, { status: 400 });
+    const body = await request.json().catch(() => ({}));
+    const purpose = FOLDERS[body.purpose] ? body.purpose : 'product';
+    if (!can(auth.admin, PERMISSION[purpose])) return forbidden();
+    const kind = body.kind === 'video' ? 'video' : 'image';
+    if (kind === 'video' && purpose !== 'site') {
+      return NextResponse.json({ message: 'Videos can only be used as site media.' }, { status: 400 });
     }
 
-    const input = Buffer.from(await file.arrayBuffer());
-    const { data, info } = await sharp(input)
-      .rotate()
-      .resize({ height: 900, width: 900, fit: 'inside', withoutEnlargement: true })
-      .webp({ quality: 82, alphaQuality: 90 })
-      .toBuffer({ resolveWithObject: true });
+    const { cloudinary: c } = await getPrivateConfig();
+    if (!c.cloudName || !c.apiKey || !c.apiSecret) {
+      return NextResponse.json({ message: 'Cloudinary is not set up on the server (CLOUDINARY_* in .env).' }, { status: 400 });
+    }
 
-    await connectDB();
-    const media = await Media.create({
-      filename: file.name.replace(/\.[^.]+$/, '') + '.webp',
-      contentType: 'image/webp',
-      size: data.length,
-      width: info.width,
-      height: info.height,
-      data,
+    const params = {
+      folder: `${c.folder}/${FOLDERS[purpose]}`,
+      timestamp: Math.round(Date.now() / 1000),
+      allowed_formats: FORMATS[kind],
+      ...(kind === 'image' && { transformation: 'c_limit,w_2400,h_2400' }),
+    };
+    const signature = cloudinary.utils.api_sign_request(params, c.apiSecret);
+
+    return NextResponse.json({
+      uploadUrl: `https://api.cloudinary.com/v1_1/${c.cloudName}/${kind}/upload`,
+      fields: { ...params, api_key: c.apiKey, signature },
     });
-
-    return NextResponse.json({ url: `/media/${media._id}`, width: info.width, height: info.height }, { status: 201 });
   } catch (error) {
     return handleError(error);
   }

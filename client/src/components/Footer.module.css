@@ -110,6 +110,10 @@
   font-weight: 800;
 }
 
+a:hover .brandName {
+  color: var(--brand-yellow);
+}
+
 .brandNote {
   display: block;
   font-size: 0.82rem;
@@ -181,9 +185,18 @@
     padding-top: 110px;
   }
 
+  /* Two short link lists side by side; brand and contact blocks span. */
   .footerContent {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 20px;
+  }
+
+  .col:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .bottomBar {
+    margin-top: 40px;
   }
 
   .peek {

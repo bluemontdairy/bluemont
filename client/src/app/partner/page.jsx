@@ -1,8 +1,10 @@
 import PartnerForm from './PartnerForm';
+import PageHero from '../../components/PageHero';
 import styles from './page.module.css';
 import { pageSocial } from '../../lib/site';
+import { getSiteMedia } from '../../lib/siteMedia';
 
-export const metadata = {
+export const generateMetadata = async () => ({
   title: 'Stock Our Ice Cream — Free Branded Deep Freezer for Shops',
   description:
     "Stock Top Kulfi, Baeley's ice cream and Blissberry Kulfusion in your shop, kirana, cafe, bakery or canteen. Branded deep freezer placement, scheduled cold-chain restocking and POS support from Blue Mont Dairy.",
@@ -11,8 +13,9 @@ export const metadata = {
     title: 'Want Blue Mont ice cream in your place?',
     description: 'Branded deep freezers, a range customers already ask for, and scheduled cold-chain restock for Blue Mont retail partners.',
     path: '/partner',
+    media: await getSiteMedia(),
   }),
-};
+});
 
 // Section 5.1 of the scope document.
 const VALUE_POINTS = [
@@ -38,18 +41,16 @@ const VALUE_POINTS = [
   },
 ];
 
-export default function PartnerPage() {
+export default async function PartnerPage() {
+  const media = await getSiteMedia();
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <div className="container">
-          <h1 className={styles.title}>Want Us in Your Place?</h1>
-          <p className={styles.subtitle}>
-            Departmental stores, kirana marts, cafes, bakeries and school canteens: join the Blue Mont family.
-            We look after our partners with branded freezers, reliable restocks and everything your counter needs.
-          </p>
-        </div>
-      </header>
+      <PageHero eyebrow="For shops, cafés & canteens" title="Want us in your place?" mascot={media['home.partner-mascot']}>
+        <p>
+          Departmental stores, kirana marts, cafés, bakeries and school canteens: join the Blue Mont family.
+          We look after our partners with branded freezers, reliable restocks and everything your counter needs.
+        </p>
+      </PageHero>
 
       <div className={`container ${styles.content}`}>
         <section className={styles.benefitsSection} aria-labelledby="why-partner">
@@ -60,8 +61,10 @@ export default function PartnerPage() {
                 <svg className={styles.benefitIcon} viewBox="0 0 24 24" aria-hidden="true">
                   <path d={point.icon} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <h3>{point.title}</h3>
-                <p>{point.text}</p>
+                <div>
+                  <h3>{point.title}</h3>
+                  <p>{point.text}</p>
+                </div>
               </div>
             ))}
           </div>

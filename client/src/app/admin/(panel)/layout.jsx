@@ -4,6 +4,7 @@ import connectDB from '../../../lib/db';
 import Lead from '../../../models/Lead';
 import Contact from '../../../models/Contact';
 import AdminNav from '../../../components/admin/AdminNav';
+import { getSiteMedia } from '../../../lib/siteMedia';
 import s from '../../../components/admin/admin.module.css';
 
 // Every page in this group requires a signed-in admin. The API routes check
@@ -13,14 +14,15 @@ export default async function PanelLayout({ children }) {
   if (!admin) redirect('/admin/login');
 
   await connectDB();
-  const [newLeads, unreadMessages] = await Promise.all([
+  const [newLeads, unreadMessages, media] = await Promise.all([
     Lead.countDocuments({ status: 'new' }),
     Contact.countDocuments({ isRead: false }),
+    getSiteMedia(),
   ]);
 
   return (
     <div className={s.shell}>
-      <AdminNav admin={{ username: admin.username, email: admin.email }} counts={{ newLeads, unreadMessages }} />
+      <AdminNav admin={{ username: admin.username, email: admin.email, role: admin.role }} counts={{ newLeads, unreadMessages }} logo={media['logo.badge']?.src} />
       <div className={s.main}>{children}</div>
     </div>
   );

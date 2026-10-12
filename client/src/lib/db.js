@@ -20,6 +20,10 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      // Fail in seconds, not the default 30, if the database can't be
+      // reached (e.g. the host's IP isn't allowed in Atlas): pages then fall
+      // back to built-in content instead of hanging.
+      serverSelectionTimeoutMS: 8000,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {

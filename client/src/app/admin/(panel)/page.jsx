@@ -20,13 +20,12 @@ async function getOverview() {
     Product.countDocuments({ isActive: true }),
     Product.countDocuments({ isActive: false }),
     Contact.countDocuments({ isRead: false }),
-    Lead.countDocuments({ sheetSynced: false }),
     Lead.find().sort({ createdAt: -1 }).limit(6).lean(),
   ]);
 }
 
 export default async function AdminOverview() {
-  const [newLeads, leadsThisWeek, freezerRequests, liveProducts, hiddenProducts, unread, unsynced, recent] = await getOverview();
+  const [newLeads, leadsThisWeek, freezerRequests, liveProducts, hiddenProducts, unread, recent] = await getOverview();
 
   const stats = [
     { label: 'New partner leads', value: newLeads, hint: `${leadsThisWeek} in the last 7 days`, href: '/admin/leads' },
@@ -43,13 +42,6 @@ export default async function AdminOverview() {
           <p className={s.pageSub}>What needs attention today.</p>
         </div>
       </div>
-
-      {unsynced > 0 && (
-        <div className={s.alertError}>
-          {unsynced} lead{unsynced === 1 ? ' was' : 's were'} not copied to the Google Sheet. Open{' '}
-          <Link href="/admin/leads" style={{ textDecoration: 'underline' }}>Partner leads</Link> to retry.
-        </div>
-      )}
 
       <div className={s.statGrid}>
         {stats.map((stat) => (

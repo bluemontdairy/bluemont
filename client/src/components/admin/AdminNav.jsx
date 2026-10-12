@@ -1,25 +1,25 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import s from './admin.module.css';
+import NavUser from './NavUser';
+import { can } from '../../lib/roles';
 
 const LINKS = [
   { href: '/admin', label: 'Overview' },
   { href: '/admin/leads', label: 'Partner leads', count: 'newLeads' },
   { href: '/admin/products', label: 'Products' },
+  { href: '/admin/categories', label: 'Categories', permission: 'categories.manage' },
+  { href: '/admin/reviews', label: 'Reviews', permission: 'reviews.edit' },
+  { href: '/admin/site-media', label: 'Site images', permission: 'siteMedia.manage' },
+  { href: '/admin/settings', label: 'Site settings', permission: 'settings.manage' },
   { href: '/admin/messages', label: 'Messages', count: 'unreadMessages' },
+  { href: '/admin/admins', label: 'Admins', permission: 'admins.manage' },
 ];
 
-export default function AdminNav({ admin, counts }) {
+export default function AdminNav({ admin, counts, logo }) {
   const pathname = usePathname();
-  const router = useRouter();
-
-  const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.replace('/admin/login');
-    router.refresh();
-  };
 
   const isActive = (href) => (href === '/admin' ? pathname === '/admin' : pathname.startsWith(href));
 
@@ -27,17 +27,19 @@ export default function AdminNav({ admin, counts }) {
     <nav className={s.nav} aria-label="Admin">
       <div className={s.navTop}>
         <Link href="/admin" className={s.navBrand}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logo/badge.webp" alt="" />
+          {logo && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logo} alt="" />
+          )}
           Blue Mont admin
         </Link>
-        <button type="button" className={`${s.btnLink} ${s.navFooterMobile}`} onClick={logout}>
-          Sign out
-        </button>
+        <div className={s.navFooterMobile}>
+          <NavUser admin={admin} compact />
+        </div>
       </div>
 
       <div className={s.navLinks}>
-        {LINKS.map((link) => (
+        {LINKS.filter((link) => !link.permission || can(admin, link.permission)).map((link) => (
           <Link
             key={link.href}
             href={link.href}
@@ -51,11 +53,7 @@ export default function AdminNav({ admin, counts }) {
       </div>
 
       <div className={s.navFooter}>
-        <span>Signed in as {admin.username}</span>
-        <a href="/" target="_blank" rel="noopener noreferrer">View website ↗</a>
-        <button type="button" className={s.btnLink} onClick={logout}>
-          Sign out
-        </button>
+        <NavUser admin={admin} />
       </div>
     </nav>
   );

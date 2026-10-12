@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { protect } from '../../../../lib/auth';
+import { handleError, unauthorized } from '../../../../lib/apiResponse';
 
 export async function GET(request) {
   try {
     const admin = await protect(request);
-    if (!admin) return NextResponse.json({ message: 'Not authorized' }, { status: 401 });
-    
-    return NextResponse.json(admin);
+    return admin ? NextResponse.json(admin) : unauthorized();
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return handleError(error);
   }
 }

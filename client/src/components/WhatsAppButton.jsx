@@ -1,9 +1,9 @@
 import styles from './WhatsAppButton.module.css';
+import { whatsappHref } from '../lib/settingsSchema';
 
-export default function WhatsAppButton() {
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '9770000000000';
-  const defaultMessage = encodeURIComponent("Hi Blue Mont, I'd like to inquire about your products.");
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${defaultMessage}`;
+// Number and message come from Admin → Site settings.
+export default function WhatsAppButton({ number, message }) {
+  const whatsappUrl = whatsappHref(number, message);
 
   return (
     <a 

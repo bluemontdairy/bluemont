@@ -3,7 +3,9 @@ import connectDB from '../../../lib/db';
 import Contact from '../../../models/Contact';
 import { protect } from '../../../lib/auth';
 import sendEmail from '../../../lib/sendEmail';
-import { buildFieldsEmail, safeSubject } from '../../../lib/email';
+import { safeSubject } from '../../../lib/email';
+import { buildEmail } from '../../../lib/emailLayout';
+import { getSiteInfo } from '../../../lib/siteSettings';
 import { str, email, nepaliMobile } from '../../../lib/validate';
 import { clientIp, isRateLimited } from '../../../lib/rateLimit';
 import { handleError, unauthorized } from '../../../lib/apiResponse';
@@ -28,13 +30,29 @@ export async function POST(request) {
     await Contact.create(input);
 
     try {
-      const { html, text } = buildFieldsEmail('New website message', [
-        ['Name', input.name],
-        ['Email', input.email],
-        ['Phone', input.phone],
-        ['Message', input.message],
-      ]);
+      const info = await getSiteInfo();
+      const { html, text } = await buildEmail({
+        mascot: 'home.scoop-mascot',
+        preheader: `${input.name}: ${input.message.slice(0, 90)}`,
+        eyebrow: 'Website message',
+        title: 'You’ve got mail',
+        greeting: `${input.name} sent a message through the website.`,
+        paragraphs: [
+          input.email
+            ? 'Reply to this email to answer them directly.'
+            : 'They didn’t leave an email address, so call or WhatsApp them instead.',
+        ],
+        rows: [
+          ['Name', input.name],
+          ['Email', input.email],
+          ['Phone', input.phone],
+          ['Message', input.message],
+        ],
+        button: { label: 'Open messages', url: `${info.siteUrl}/admin/messages` },
+        reason: 'You’re getting this because this inbox receives Blue Mont website messages.',
+      });
       await sendEmail({
+        to: info.notifyEmails || undefined,
         subject: safeSubject(`New message from ${input.name}`),
         html,
         text,

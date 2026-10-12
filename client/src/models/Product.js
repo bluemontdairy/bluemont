@@ -1,14 +1,22 @@
 const mongoose = require('mongoose');
 
-// Brand and format are free strings (not enums) so staff can add a new line
-// such as "Fresh Dairy" or a "Tubs" format from the admin panel without a
-// code change. The catalog builds its filters from whatever values exist.
+// Brand, line and format are free strings (not enums) so staff can add a new
+// brand such as "Fresh Dairy" or a "Tubs" format from the admin panel without
+// a code change. The catalog builds its filters from whatever values exist.
+// Category is a real reference: it decides which extra fields (attributes)
+// the product has.
 const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
       trim: true,
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+      index: true,
     },
     brand: {
       // slug, e.g. "baeleys", "blissberry", "topkulfi", "fresh-dairy"
@@ -17,7 +25,7 @@ const productSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
-    category: {
+    line: {
       // product line shown on the card, e.g. "Big Cup", "Family Pack"
       type: String,
       required: true,
@@ -40,13 +48,26 @@ const productSchema = new mongoose.Schema(
       default: null,
       min: 0,
     },
-    image: {
-      type: String,
-      default: '',
-    },
+    // Packshot on Cloudinary. publicId lets the old file be deleted when it
+    // is replaced; width/height keep the layout steady while it loads.
+    image: { type: String, default: '' },
+    imagePublicId: { type: String, default: '' },
+    imageWidth: { type: Number, default: null },
+    imageHeight: { type: Number, default: null },
     description: {
       type: String,
       default: '',
+    },
+    // Values for the category's own fields, keyed by attribute key, e.g.
+    // { flavour: 'Mango', productType: 'Ice cream' }.
+    attributes: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    // Shown in "Our latest favourites" on the homepage.
+    featured: {
+      type: Boolean,
+      default: false,
     },
     isActive: {
       type: Boolean,
@@ -59,6 +80,7 @@ const productSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    minimize: false,
   }
 );
 

@@ -1,6 +1,8 @@
 import connectDB from '../../../../lib/db';
 import Contact from '../../../../models/Contact';
 import MessagesManager from '../../../../components/admin/MessagesManager';
+import { getCurrentAdmin } from '../../../../lib/auth';
+import { can } from '../../../../lib/roles';
 
 export const metadata = { title: 'Messages' };
 
@@ -16,5 +18,5 @@ export default async function AdminMessagesPage() {
     isRead: m.isRead,
     createdAt: m.createdAt.toISOString(),
   }));
-  return <MessagesManager initialMessages={plain} />;
+  return <MessagesManager initialMessages={plain} canDelete={can(await getCurrentAdmin(), 'messages.delete')} />;
 }

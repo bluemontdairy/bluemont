@@ -1,11 +1,16 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
 import Carousel from '../components/Carousel';
 import HeroVideo from '../components/HeroVideo';
-import { BRANDS, FAVORITES, MONSTERS, REVIEWS, STATS, TOP_KULFI, VALUE_PICKS, VALUE_POINTS } from '../lib/homeContent';
+import SiteImage from '../components/SiteImage';
+import { BRANDS, MONSTERS, VALUE_PICKS, VALUE_POINTS, buildStats } from '../lib/homeContent';
+import { getPublishedReviews } from '../lib/reviews';
+import { getSiteInfo } from '../lib/siteSettings';
+import { getSiteMedia } from '../lib/siteMedia';
+import { getPublicCatalog } from '../lib/catalog';
+import { brandLabel, formatMrp } from '../lib/brands';
+import { cldTransform, videoPoster } from '../lib/media';
 
 export const metadata = {
   title: { absolute: "Blue Mont Dairy | Ice Cream & Kulfi in Nepal: Top Kulfi, Baeley's, Blissberry" },
@@ -60,25 +65,40 @@ function Scoop({ color }) {
   );
 }
 
-// Drop a 16:9 loop (H.264 MP4, muted, ideally under ~4 MB) at this path and the
-// hero plays it under the blue gradient; until then the gradient stands alone.
-const HERO_VIDEO = '/hero/hero-loop.mp4';
-const HERO_POSTER = '/hero/hero-poster.webp';
+// Product photo for next/image. Photos uploaded before sizes were stored
+// fall back to a tall packshot ratio.
+const productImg = (p) => ({ src: p.image, w: p.imageWidth || 600, h: p.imageHeight || 900 });
 
-const publicFileExists = (p) => fs.existsSync(path.join(process.cwd(), 'public', p));
 
-// Placeholder reviews only render in development; see REVIEWS in homeContent.
-const reviews = REVIEWS.filter((r) => !r.placeholder || process.env.NODE_ENV !== 'production');
+export default async function Home() {
+  const [media, { products }, info, reviews] = await Promise.all([
+    getSiteMedia(),
+    getPublicCatalog(),
+    getSiteInfo(),
+    getPublishedReviews(),
+  ]);
+  const { stats, socials } = info;
+  // "@bluemont_dairy" from the Instagram link, for the button label.
+  const instagramHandle = socials.instagram ? `@${new URL(socials.instagram).pathname.split('/').filter(Boolean)[0] || 'instagram'}` : '';
 
-export default function Home() {
-  const hasVideo = publicFileExists(HERO_VIDEO);
-  const hasPoster = publicFileExists(HERO_POSTER);
+  // Hero loop (Admin → Site images → Hero background video). HeroVideo picks
+  // a rendition for the screen size; the poster is the uploaded one or the
+  // video's first frame.
+  const video = media['hero.video'];
+  const heroVideo = video?.src || '';
+  const heroPoster = media['hero.poster'] ? cldTransform(media['hero.poster'].src, 'f_auto,q_auto,w_1600,c_limit') : videoPoster(video?.src);
+
+  const favourites = products.filter((p) => p.featured);
+  const kulfiShelf = products.filter((p) => p.category?.slug === 'kulfi' && p.image);
+  const valuePicks = VALUE_PICKS.map((v) => ({ ...v, item: products.find((p) => p.brand === v.brand && p.name === v.product) })).filter(
+    (v) => v.item?.image
+  );
 
   return (
     <>
       {/* 1. Hero: what we make, in plain words, over the video loop */}
       <section className={styles.hero}>
-        {hasVideo && <HeroVideo src={HERO_VIDEO} poster={hasPoster ? HERO_POSTER : undefined} />}
+        {heroVideo && <HeroVideo src={heroVideo} poster={heroPoster || undefined} />}
         <div className={styles.heroShade} aria-hidden="true" />
         <div className={styles.heroTexture} aria-hidden="true" />
         <div className={styles.heroInner}>
@@ -102,36 +122,27 @@ export default function Home() {
             </Link>
           </div>
           <ul className={styles.heroTrust}>
-            <li><Check /> 20 years in Lalitpur</li>
-            <li><Check /> 12+ districts &amp; cities</li>
+            <li><Check /> {stats.years} years in Lalitpur</li>
+            <li><Check /> {stats.districts} districts &amp; cities</li>
             <li><Check /> DFTQC-compliant</li>
           </ul>
         </div>
 
-        <Image
-          src="/brand/mascots/yeti-cone.webp"
-          alt=""
+        <SiteImage
+          media={media['hero.mascot-left']}
           aria-hidden="true"
-          width={717}
-          height={900}
           sizes="(max-width: 640px) 34vw, 240px"
           className={styles.heroMascot}
         />
-        <Image
-          src="/brand/products/kulfi-chocodip.webp"
-          alt=""
+        <SiteImage
+          media={media['hero.kulfi']}
           aria-hidden="true"
-          width={293}
-          height={900}
           sizes="(max-width: 640px) 20vw, 110px"
           className={styles.heroKulfi}
         />
-        <Image
-          src="/brand/mascots/butterscotch.webp"
-          alt=""
+        <SiteImage
+          media={media['hero.mascot-right']}
           aria-hidden="true"
-          width={646}
-          height={603}
           sizes="(max-width: 640px) 30vw, 220px"
           className={styles.heroMascotRight}
         />
@@ -158,24 +169,30 @@ export default function Home() {
           </div>
 
           <Carousel label="favourite products" className={styles.favCarousel} trackClassName={styles.favTrack}>
-            {FAVORITES.map((p) => (
-              <li key={`${p.brand}-${p.name}`} className={styles.favItem}>
-                <div className={styles.favImgWrap}>
-                  <span className={styles.favPlate} aria-hidden="true" />
-                  <Image
-                    src={p.image}
-                    alt={`${p.brand} ${p.name} ${p.type.toLowerCase()}`}
-                    width={p.w}
-                    height={p.h}
-                    sizes="150px"
-                    className={styles.favImg}
-                  />
-                </div>
-                <p className={styles.favTag}>{p.type}</p>
-                <h3 className={styles.favName}>{p.name}</h3>
-                {p.price && <p className={styles.favPrice}>{p.price}</p>}
-              </li>
-            ))}
+            {favourites.map((p) => {
+              const type = p.category?.name || '';
+              const img = p.image ? productImg(p) : media['logo.badge'];
+              return (
+                <li key={p._id} className={styles.favItem}>
+                  <div className={styles.favImgWrap}>
+                    <span className={styles.favPlate} aria-hidden="true" />
+                    {img && (
+                      <Image
+                        src={img.src}
+                        alt={`${brandLabel(p.brand)} ${p.name} ${type.toLowerCase()}`.trim()}
+                        width={img.w}
+                        height={img.h}
+                        sizes="150px"
+                        className={styles.favImg}
+                      />
+                    )}
+                  </div>
+                  <p className={styles.favTag}>{type}</p>
+                  <h3 className={styles.favName}>{p.name}</h3>
+                  {typeof p.mrp === 'number' && <p className={styles.favPrice}>{formatMrp(p.mrp)}</p>}
+                </li>
+              );
+            })}
           </Carousel>
         </div>
       </section>
@@ -185,22 +202,29 @@ export default function Home() {
         <div className={`container ${styles.momentsGrid}`}>
           <div className={styles.valueArt} data-reveal>
             <ul className={styles.valueShelf}>
-              {VALUE_PICKS.map((v) => (
-                <li key={v.name}>
-                  <Image src={v.image} alt={v.alt} width={v.w} height={v.h} sizes="140px" className={styles.valueImg} />
-                  <span className={styles.valueTag}>
-                    {v.name}
-                    <strong>{v.price}</strong>
-                  </span>
-                </li>
-              ))}
+              {valuePicks.map(({ label, item }) => {
+                const img = productImg(item);
+                return (
+                  <li key={label}>
+                    <Image
+                      src={img.src}
+                      alt={`${brandLabel(item.brand)} ${item.name}`}
+                      width={img.w}
+                      height={img.h}
+                      sizes="140px"
+                      className={styles.valueImg}
+                    />
+                    <span className={styles.valueTag}>
+                      {label}
+                      <strong>{formatMrp(item.mrp)}</strong>
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
-            <Image
-              src="/brand/mascots/yeti-wave.webp"
-              alt=""
+            <SiteImage
+              media={media['home.value-mascot']}
               aria-hidden="true"
-              width={840}
-              height={900}
               sizes="110px"
               className={styles.valueMascot}
             />
@@ -225,7 +249,7 @@ export default function Home() {
       {/* 3b. Numbers strip */}
       <section className={`container ${styles.stats}`} aria-label="Blue Mont Dairy in numbers">
         <ul className={styles.statsList}>
-          {STATS.map((st, i) => (
+          {buildStats(stats).map((st, i) => (
             <li key={st.label} data-reveal style={{ '--reveal-delay': `${i * 90}ms` }}>
               <p className={styles.statValue}>
                 {st.value}
@@ -241,11 +265,9 @@ export default function Home() {
       <section id="top-kulfi" className={styles.kulfi} aria-labelledby="kulfi-title">
         <div className={`container ${styles.kulfiInner}`}>
           <div className={styles.kulfiText} data-reveal>
-            <Image
-              src="/brand/logo/top-kulfi-wordmark.webp"
+            <SiteImage
+              media={media['logo.topkulfi']}
               alt="Top Kulfi"
-              width={960}
-              height={690}
               sizes="220px"
               className={styles.kulfiLogo}
             />
@@ -261,19 +283,25 @@ export default function Home() {
             </Link>
           </div>
           <ul className={styles.kulfiShelf} aria-label="Top Kulfi range">
-            {TOP_KULFI.map((k, i) => (
-              <li key={k.name} data-reveal style={{ '--reveal-delay': `${i * 60}ms`, '--s': k.h / 900 }}>
-                <Image
-                  src={k.image}
-                  alt={`Top Kulfi ${k.name}`}
-                  width={k.w}
-                  height={k.h}
-                  sizes="120px"
-                  className={styles.kulfiImg}
-                />
-                <span>{k.name}</span>
-              </li>
-            ))}
+            {kulfiShelf.map((k, i) => {
+              const img = productImg(k);
+              // Relative heights (a mini kulfi stands shorter), from the
+              // packshot's own size; capped so a large upload isn't huge.
+              const scale = Math.min(1, img.h / 900);
+              return (
+                <li key={k._id} data-reveal style={{ '--reveal-delay': `${i * 60}ms`, '--s': scale }}>
+                  <Image
+                    src={img.src}
+                    alt={`Top Kulfi ${k.name}`}
+                    width={img.w}
+                    height={img.h}
+                    sizes="120px"
+                    className={styles.kulfiImg}
+                  />
+                  <span>{k.name}</span>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </section>
@@ -285,7 +313,7 @@ export default function Home() {
             <p className={styles.eyebrow}>Our family of brands</p>
             <h2 id="brands-title" className={styles.heading}>One dairy, many favourites</h2>
             <p>
-              For about 20 years Blue Mont Dairy has made frozen desserts in Lalitpur. Today that means kulfi,
+              For about {stats.years} years Blue Mont Dairy has made frozen desserts in Lalitpur. Today that means kulfi,
               Kulfusion and ice cream under three brands.
             </p>
           </div>
@@ -293,18 +321,16 @@ export default function Home() {
             {BRANDS.map((b, i) => (
               <li key={b.slug} className={styles.brandCard} data-reveal style={{ '--reveal-delay': `${i * 90}ms` }}>
                 <div className={styles.brandArt} style={{ background: b.tint }}>
-                  <Image
-                    src={b.image.src}
-                    alt={b.image.alt}
-                    width={b.image.w}
-                    height={b.image.h}
+                  <SiteImage
+                    media={media[b.image]}
+                    alt={b.alt}
                     sizes="140px"
                     className={styles.brandProduct}
                   />
                 </div>
                 <div className={styles.brandBody}>
-                  {b.logo ? (
-                    <Image src={b.logo.src} alt={b.name} width={b.logo.w} height={b.logo.h} sizes="160px" className={styles.brandLogo} />
+                  {media[b.logo] ? (
+                    <SiteImage media={media[b.logo]} alt={b.name} sizes="160px" className={styles.brandLogo} />
                   ) : (
                     <p className={styles.brandName}>{b.name}</p>
                   )}
@@ -323,20 +349,15 @@ export default function Home() {
       {/* 6. Quality split */}
       <section id="quality" className={styles.split}>
         <div className={styles.splitArt}>
-          <Image
-            src="/brand/products/tub-box.webp"
+          <SiteImage
+            media={media['home.quality-product']}
             alt="Baeley's ice cream tub box"
-            width={708}
-            height={900}
             sizes="(max-width: 820px) 40vw, 240px"
             className={styles.splitProduct}
           />
-          <Image
-            src="/brand/mascots/chocolate-cheer.webp"
-            alt=""
+          <SiteImage
+            media={media['home.quality-mascot']}
             aria-hidden="true"
-            width={824}
-            height={900}
             sizes="(max-width: 820px) 34vw, 220px"
             className={styles.splitMascot}
           />
@@ -373,7 +394,7 @@ export default function Home() {
             {MONSTERS.map((m) => (
               <li key={m.name} className={styles.monsterCard}>
                 <div className={styles.monsterImgWrap} style={{ background: m.tint }}>
-                  <Image src={m.image} alt="" width={m.w} height={m.h} sizes="220px" className={styles.monsterImg} />
+                  <SiteImage media={media[m.image]} sizes="220px" className={styles.monsterImg} />
                   <Scoop color={m.scoop} />
                 </div>
                 <div className={styles.monsterLabel}>
@@ -392,7 +413,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8. Reviews (left out until there are real ones) */}
+      {/* 8. Reviews from Admin → Reviews (left out until one is published) */}
       {reviews.length > 0 && (
         <section className={styles.reviews} aria-labelledby="reviews-title">
           <div className="container">
@@ -402,13 +423,30 @@ export default function Home() {
             </div>
             <ul className={styles.reviewGrid}>
               {reviews.map((r, i) => (
-                <li key={i} className={styles.reviewCard} data-reveal style={{ '--reveal-delay': `${i * 90}ms` }}>
+                <li key={r._id} className={styles.reviewCard} data-reveal style={{ '--reveal-delay': `${i * 90}ms` }}>
                   <span className={styles.reviewMark} aria-hidden="true">“</span>
+                  {r.rating && (
+                    <p className={styles.reviewStars} aria-label={`${r.rating} out of 5 stars`}>
+                      {'★'.repeat(r.rating)}
+                      <span aria-hidden="true">{'★'.repeat(5 - r.rating)}</span>
+                    </p>
+                  )}
                   <blockquote>{r.quote}</blockquote>
-                  <p className={styles.reviewWho}>
-                    <strong>{r.name}</strong>
-                    {r.place && <span>{r.place}</span>}
-                  </p>
+                  <div className={styles.reviewWho}>
+                    {r.photo && (
+                      <Image
+                        src={cldTransform(r.photo, 'c_fill,g_face,w_96,h_96')}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className={styles.reviewPhoto}
+                      />
+                    )}
+                    <p>
+                      <strong>{r.name}</strong>
+                      {r.place && <span>{r.place}</span>}
+                    </p>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -416,34 +454,47 @@ export default function Home() {
         </section>
       )}
 
-      {/* 9. Latest scoop: follow along */}
-      <section className={styles.scoopBand} aria-labelledby="scoop-title">
-        <div className={`container ${styles.scoopInner}`} data-reveal>
-          <Image src="/brand/logo/bluemont-white.webp" alt="" width={439} height={354} sizes="96px" className={styles.scoopBadge} />
-          <div className={styles.scoopText}>
-            <h2 id="scoop-title" className={styles.heading}>Get the latest scoop</h2>
-            <p>New flavours, freezer drops and monster sightings land on our socials first.</p>
+      {/* 9. Latest scoop: follow along (only when a social link is set) */}
+      {Object.values(socials).some(Boolean) && (
+        <section className={styles.scoopBand} aria-labelledby="scoop-title">
+          <div className={`container ${styles.scoopInner}`} data-reveal>
+            <SiteImage media={media['logo.bluemont']} sizes="96px" className={styles.scoopBadge} />
+            <div className={styles.scoopText}>
+              <h2 id="scoop-title" className={styles.heading}>Get the latest scoop</h2>
+              <p>New flavours, freezer drops and monster sightings land on our socials first.</p>
+            </div>
+            <div className={styles.scoopActions}>
+              {socials.instagram && (
+                <a href={socials.instagram} target="_blank" rel="noopener noreferrer" className={`${styles.btn} ${styles.btnBlue}`}>
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" /></svg>
+                  {instagramHandle}
+                </a>
+              )}
+              {socials.facebook && (
+                <a href={socials.facebook} target="_blank" rel="noopener noreferrer" className={styles.scoopIcon} aria-label="Facebook">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v7h4v-7h3l1-4h-4V8.5a.5.5 0 0 1 .5-.5z" /></svg>
+                </a>
+              )}
+              {socials.tiktok && (
+                <a href={socials.tiktok} target="_blank" rel="noopener noreferrer" className={styles.scoopIcon} aria-label="TikTok">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.3 2.2 1.6 3.6 3.9 3.8v3.1c-1.4.1-2.7-.3-3.9-1.1v6.1c0 3.6-2.6 6.1-6 6.1a6 6 0 0 1-6-6c0-3.6 3-6.2 6.7-5.9v3.2c-1.7-.3-3.4.9-3.4 2.7 0 1.6 1.2 2.8 2.7 2.8 1.6 0 2.8-1.1 2.8-3V3h3.2z" /></svg>
+                </a>
+              )}
+              {socials.youtube && (
+                <a href={socials.youtube} target="_blank" rel="noopener noreferrer" className={styles.scoopIcon} aria-label="YouTube">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.6 2.6 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3L10 15z" /></svg>
+                </a>
+              )}
+            </div>
+            <SiteImage
+              media={media['home.scoop-mascot']}
+              aria-hidden="true"
+              sizes="130px"
+              className={styles.scoopMascot}
+            />
           </div>
-          <div className={styles.scoopActions}>
-            <a href="https://instagram.com/bluemont_dairy" target="_blank" rel="noopener noreferrer" className={`${styles.btn} ${styles.btnBlue}`}>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" /></svg>
-              @bluemont_dairy
-            </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.scoopIcon} aria-label="Facebook">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v7h4v-7h3l1-4h-4V8.5a.5.5 0 0 1 .5-.5z" /></svg>
-            </a>
-          </div>
-          <Image
-            src="/brand/mascots/strawberry.webp"
-            alt=""
-            aria-hidden="true"
-            width={790}
-            height={799}
-            sizes="130px"
-            className={styles.scoopMascot}
-          />
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 10. Short pointer for shops; the full pitch lives on /partner */}
       <section className={styles.partner} aria-labelledby="partner-title">
@@ -452,19 +503,16 @@ export default function Home() {
             <p className={styles.eyebrow}>For shops, cafés &amp; canteens</p>
             <h2 id="partner-title" className={styles.heading}>Want us in your place?</h2>
             <p>
-              Join the shops across 12+ districts and cities that keep Top Kulfi, Baeley&apos;s and Blissberry in
+              Join the shops across {stats.districts} districts and cities that keep Top Kulfi, Baeley&apos;s and Blissberry in
               their freezers. We&apos;d love to have you in the Blue Mont family.
             </p>
             <Link href="/partner" className={`${styles.btn} ${styles.btnYellow}`}>
               Become a partner <Arrow />
             </Link>
           </div>
-          <Image
-            src="/brand/mascots/yeti-jump.webp"
-            alt=""
+          <SiteImage
+            media={media['home.partner-mascot']}
             aria-hidden="true"
-            width={941}
-            height={900}
             sizes="(max-width: 820px) 50vw, 280px"
             className={styles.partnerMascot}
           />

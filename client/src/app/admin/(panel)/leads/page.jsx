@@ -1,6 +1,8 @@
 import connectDB from '../../../../lib/db';
 import Lead from '../../../../models/Lead';
 import LeadsManager from '../../../../components/admin/LeadsManager';
+import { getCurrentAdmin } from '../../../../lib/auth';
+import { can } from '../../../../lib/roles';
 
 export const metadata = { title: 'Partner leads' };
 
@@ -13,5 +15,5 @@ export default async function AdminLeadsPage() {
     createdAt: l.createdAt.toISOString(),
     updatedAt: l.updatedAt.toISOString(),
   }));
-  return <LeadsManager initialLeads={plain} />;
+  return <LeadsManager initialLeads={plain} canDelete={can(await getCurrentAdmin(), 'leads.delete')} />;
 }

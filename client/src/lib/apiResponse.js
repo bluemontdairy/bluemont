@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
 import { ValidationError } from './validate';
+import { SchemaError } from './categorySchema';
+
+export const forbidden = (message = 'Your role doesn’t allow this. Ask a super admin.') =>
+  NextResponse.json({ message }, { status: 403 });
+
+/** Response for a failed authorize() check. */
+export const denied = ({ status }) => (status === 403 ? forbidden() : unauthorized());
 
 export const unauthorized = () => NextResponse.json({ message: 'Not authorized' }, { status: 401 });
 
@@ -8,7 +15,7 @@ export const notFound = () => NextResponse.json({ message: 'Not found' }, { stat
 // Validation messages are safe to show; anything else is logged and hidden
 // so database or stack details never reach the browser.
 export const handleError = (error) => {
-  if (error instanceof ValidationError) {
+  if (error instanceof ValidationError || error instanceof SchemaError) {
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
   if (error?.name === 'ValidationError' || error?.name === 'CastError') {

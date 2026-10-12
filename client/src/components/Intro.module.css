@@ -22,7 +22,7 @@
   line-height: 1;
   white-space: nowrap;
 
-  background-image: url('/hero/intro-fill.jpg');
+  background-image: var(--intro-fill);
   background-size: cover;
   background-position: center;
   -webkit-background-clip: text;

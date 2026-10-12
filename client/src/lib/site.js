@@ -1,8 +1,8 @@
-// Single source of truth for business details used by SEO tags, JSON-LD,
-// the footer and the WhatsApp links. Values marked TODO are placeholders
-// until Blue Mont confirms them; override any of them through env vars.
+// Fixed brand details and SEO helpers. Contact details, social links, the
+// address and the like are editable in Admin → Site settings: read them with
+// getSiteInfo() from lib/siteSettings.js. The values here are the defaults.
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://bluemont.com.np').replace(/\/$/, '');
+import { absoluteMediaUrl, cldTransform } from './media';
 
 export const SITE = {
   name: 'Blue Mont Dairy',
@@ -11,10 +11,9 @@ export const SITE = {
   description:
     "Blue Mont Dairy is a Lalitpur ice cream and kulfi maker with 20 years of heritage, making Top Kulfi, Baeley's ice cream and Blissberry Kulfusion. Premium quality at an honest price, sold in 12+ districts and cities across Nepal.",
   foundingYear: 2006, // TODO: confirm (scope says ~20 years of operation)
-  // TODO: confirm the real numbers and email before launch.
-  phone: process.env.NEXT_PUBLIC_SALES_PHONE || '+977-1-0000000',
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '9770000000000',
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@bluemont.com.np',
+  phone: '',
+  whatsapp: '',
+  email: 'info@bluemont.com.np',
   address: {
     streetAddress: 'Lalitpur', // TODO: factory street address
     addressLocality: 'Lalitpur',
@@ -26,7 +25,20 @@ export const SITE = {
   areaServed: ['Lalitpur', 'Kathmandu', 'Bhaktapur'],
   social: ['https://instagram.com/bluemont_dairy'],
   brands: ['Top Kulfi', "Baeley's", 'Blissberry'],
-  ogImage: '/og.jpg',
+};
+
+const SHARE_ALT = 'Ice cream and kulfi by Blue Mont Dairy, Lalitpur';
+
+/**
+ * Open Graph image entry from the "share.image" site media slot (Admin →
+ * Site images). Cloudinary crops it to 1200 × 630 as a JPEG, which every
+ * social network accepts.
+ */
+export const shareImage = (media) => {
+  const img = media?.['share.image'];
+  if (!img) return [];
+  const url = img.uploaded ? cldTransform(img.src, 'c_fill,g_auto,w_1200,h_630,f_jpg,q_auto') : img.src;
+  return [{ url, width: 1200, height: 630, alt: SHARE_ALT }];
 };
 
 export const SEO_KEYWORDS = [
@@ -54,49 +66,55 @@ export const PUBLIC_ROUTES = [
 
 // Next.js replaces (doesn't merge) a parent's openGraph/twitter objects, so
 // every page builds both through this helper to keep the share image.
-export const pageSocial = ({ title, description, path }) => ({
-  openGraph: {
-    type: 'website',
-    locale: 'en_NP',
-    siteName: SITE.name,
-    url: path,
-    title,
-    description,
-    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: "Ice cream and kulfi by Blue Mont Dairy, Lalitpur" }],
-  },
-  twitter: { card: 'summary_large_image', title, description, images: [SITE.ogImage] },
-});
+// `media` is the result of getSiteMedia() (for the share image).
+export const pageSocial = ({ title, description, path, media }) => {
+  const images = shareImage(media);
+  return {
+    openGraph: {
+      type: 'website',
+      locale: 'en_NP',
+      siteName: SITE.name,
+      url: path,
+      title,
+      description,
+      images,
+    },
+    twitter: { card: 'summary_large_image', title, description, images: images.map((i) => i.url) },
+  };
+};
 
-export const whatsappLink = (message) =>
-  `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
+/** wa.me chat link; `number` comes from the site settings. */
+export const whatsappLink = (message, number) =>
+  `https://wa.me/${String(number).replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
 
 // Serialises JSON-LD for a <script> tag. Escaping "<" stops a product name
 // containing "</script>" from breaking out of the tag.
 export const jsonLd = (data) => JSON.stringify(data).replace(/</g, '\\u003c');
 
-export const organizationJsonLd = () => ({
+// `info` is getSiteInfo() (admin-editable details); `media` is getSiteMedia().
+export const organizationJsonLd = (media, info) => ({
   '@context': 'https://schema.org',
   '@type': ['Organization', 'LocalBusiness'],
-  '@id': `${SITE_URL}/#organization`,
+  '@id': `${info.siteUrl}/#organization`,
   name: SITE.name,
-  legalName: SITE.legalName,
+  legalName: info.legalName,
   description: SITE.description,
-  url: SITE_URL,
-  logo: `${SITE_URL}/brand/logo/bluemont-blue.webp`,
-  image: `${SITE_URL}${SITE.ogImage}`,
-  telephone: SITE.phone,
-  email: SITE.email,
-  foundingDate: String(SITE.foundingYear),
-  address: { '@type': 'PostalAddress', ...SITE.address },
-  geo: { '@type': 'GeoCoordinates', ...SITE.geo },
-  areaServed: SITE.areaServed.map((name) => ({ '@type': 'City', name })),
+  url: info.siteUrl,
+  logo: absoluteMediaUrl(media['logo.bluemont-tile']?.src, info.siteUrl),
+  image: absoluteMediaUrl(shareImage(media)[0]?.url, info.siteUrl),
+  ...(info.phone && { telephone: info.phone }),
+  ...(info.email && { email: info.email }),
+  foundingDate: String(info.foundingYear),
+  address: { '@type': 'PostalAddress', ...info.address },
+  geo: { '@type': 'GeoCoordinates', ...info.geo },
+  areaServed: info.areaServed.map((name) => ({ '@type': 'City', name })),
   brand: SITE.brands.map((name) => ({ '@type': 'Brand', name })),
-  sameAs: SITE.social,
+  sameAs: info.social,
   contactPoint: [
     {
       '@type': 'ContactPoint',
       contactType: 'sales',
-      telephone: SITE.phone,
+      ...(info.phone && { telephone: info.phone }),
       areaServed: 'NP',
       availableLanguage: ['en', 'ne'],
     },

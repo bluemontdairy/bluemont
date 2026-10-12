@@ -1,0 +1,228 @@
+/* Admin user menu, after shadcn/ui's sidebar NavUser + DropdownMenu:
+   zinc neutrals, 8px radius, 4px menu padding, quick zoom-in. */
+
+.root {
+  position: relative;
+  width: 100%;
+}
+
+.compact {
+  width: auto;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.trigger:hover,
+.trigger[data-state='open'] {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--brand-yellow);
+  outline-offset: 2px;
+}
+
+.compact .trigger {
+  padding: 4px;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--brand-yellow);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.avatarSm {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.who {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.name {
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.email {
+  overflow: hidden;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.62);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  display: flex;
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* Menu */
+.menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  min-width: 224px;
+  padding: 4px;
+  border: 1px solid #E4E4E7;
+  border-radius: 10px;
+  background: #fff;
+  color: #09090B;
+  box-shadow: 0 10px 24px -6px rgba(9, 9, 11, 0.18), 0 4px 8px -4px rgba(9, 9, 11, 0.1);
+  transform-origin: bottom left;
+  animation: menu-in 0.14s ease-out;
+  outline: none;
+}
+
+.compact .menu {
+  top: calc(100% + 8px);
+  right: 0;
+  bottom: auto;
+  left: auto;
+  width: 240px;
+  transform-origin: top right;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu {
+    animation: none;
+  }
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 4px;
+}
+
+.labelName {
+  overflow: hidden;
+  color: #09090B;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.labelEmail {
+  overflow: hidden;
+  font-size: 0.75rem;
+  color: #71717A;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.roleRow {
+  padding: 2px 8px 6px 48px;
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border: 1px solid #E4E4E7;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #3F3F46;
+}
+
+.separator {
+  height: 1px;
+  margin: 4px -4px;
+  background: #E4E4E7;
+}
+
+/* `.menu .item` (not just `.item`) so the sidebar's own link colours,
+   white on hover, can't override the menu's dark text. */
+.menu .item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #09090B;
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.menu .item svg {
+  flex-shrink: 0;
+  color: #71717A;
+}
+
+.menu .item:hover,
+.menu .item:focus-visible {
+  background: #F4F4F5;
+  color: #09090B;
+}
+
+.menu .item:hover svg,
+.menu .item:focus-visible svg {
+  color: #09090B;
+}
+
+.menu .itemDanger:hover,
+.menu .itemDanger:focus-visible {
+  background: #FEF2F2;
+  color: #B91C1C;
+}
+
+.menu .itemDanger:hover svg,
+.menu .itemDanger:focus-visible svg {
+  color: #B91C1C;
+}
+
+.menu .item:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

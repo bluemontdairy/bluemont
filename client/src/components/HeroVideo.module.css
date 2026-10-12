@@ -33,8 +33,20 @@
   outline-offset: 2px;
 }
 
+/* Below the header on smaller screens, clear of the mascots that stand
+   along the hero's foot. */
+@media (max-width: 1024px) {
+  .toggle {
+    top: 96px;
+    bottom: auto;
+    right: 16px;
+  }
+}
+
 @media (max-width: 640px) {
   .toggle {
-    bottom: 186px;
+    top: 80px;
+    width: 32px;
+    height: 32px;
   }
 }

@@ -14,7 +14,7 @@ const dateFmt = new Intl.DateTimeFormat('en-GB', {
   timeZone: 'Asia/Kathmandu',
 });
 
-export default function MessagesManager({ initialMessages }) {
+export default function MessagesManager({ initialMessages, canDelete = false }) {
   const router = useRouter();
   const [messages, setMessages] = useState(initialMessages);
   const [filter, setFilter] = useState('unread');
@@ -89,9 +89,11 @@ export default function MessagesManager({ initialMessages }) {
                 <button type="button" className={`${s.btnGhost} ${s.btnSmall}`} onClick={() => setRead(m, !m.isRead)}>
                   Mark as {m.isRead ? 'unread' : 'read'}
                 </button>
-                <button type="button" className={`${s.btnDanger} ${s.btnSmall}`} onClick={() => remove(m)}>
-                  Delete
-                </button>
+                {canDelete && (
+                  <button type="button" className={`${s.btnDanger} ${s.btnSmall}`} onClick={() => remove(m)}>
+                    Delete
+                  </button>
+                )}
               </div>
             </article>
           ))}

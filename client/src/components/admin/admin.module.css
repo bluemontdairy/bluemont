@@ -696,3 +696,198 @@
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Site images */
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.mediaCard {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #E3E8EF;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.mediaPreview {
+  display: grid;
+  place-items: center;
+  height: 160px;
+  padding: var(--spacing-3);
+  overflow: hidden;
+  /* Checkerboard so white logos and transparent cut-outs stay visible. */
+  background:
+    repeating-conic-gradient(#94A3B8 0% 25%, #B6C2D1 0% 50%) 50% / 18px 18px;
+}
+
+.mediaPreview img {
+  display: block;
+  max-width: 100%;
+  max-height: 136px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.mediaPreview video {
+  width: 100%;
+  height: 136px;
+  object-fit: contain;
+  background: #000;
+}
+
+.mediaBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+}
+
+.mediaBody h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* A bordered group inside a form, e.g. one category field definition. */
+.fieldRow {
+  border: 1px solid #E3E8EF;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  margin: 0;
+  min-width: 0;
+}
+
+.disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Admins page */
+.roleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-5);
+}
+
+.roleCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  background: #fff;
+  border: 1px solid #E3E8EF;
+  border-radius: var(--radius-lg);
+}
+
+.roleOption {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  padding: var(--spacing-3);
+  margin-top: var(--spacing-2);
+  border: 1px solid #E3E8EF;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.roleOption:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--blue-mist);
+}
+
+.roleOption input {
+  margin-top: 4px;
+}
+
+/* Sticky save bar (Site settings) */
+.saveBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+  max-width: 860px;
+  margin-top: var(--spacing-5);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(6px);
+  border: 1px solid #E3E8EF;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 -4px 18px rgba(21, 51, 90, 0.08);
+}
+
+.saveBar > span {
+  margin-right: auto;
+}
+
+/* Reviews */
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.reviewItem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  justify-content: space-between;
+  padding: var(--spacing-4) var(--spacing-5);
+  background: #fff;
+  border: 1px solid #E3E8EF;
+  border-radius: var(--radius-lg);
+}
+
+.reviewQuote {
+  position: relative;
+  flex: 1 1 360px;
+  min-width: 0;
+  padding-left: 28px;
+}
+
+.reviewQuote p {
+  margin: 0 0 var(--spacing-2);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.reviewQuote .cellSub {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.reviewMarkAdmin {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--brand-yellow-deep);
+}
+
+.reviewAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reviewSide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-2);
+}

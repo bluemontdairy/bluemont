@@ -20,3 +20,8 @@ export function isRateLimited(key, { limit = 5, windowMs = 10 * 60 * 1000 } = {}
   entry.count += 1;
   return entry.count > limit;
 }
+
+/** Forget a key's hits, e.g. after a successful sign-in. */
+export function clearRateLimit(key) {
+  buckets.delete(key);
+}

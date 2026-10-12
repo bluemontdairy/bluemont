@@ -9,7 +9,7 @@ export async function adminApi(url, options = {}) {
   if (res.status === 401) {
     // A hard navigation clears all client state from the expired session.
     // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-    window.location.href = '/admin/login';
+    window.location.href = '/admin/login?notice=expired';
     throw new Error('Your session expired. Please sign in again.');
   }
   if (!res.ok) throw new Error(body.message || 'Request failed.');

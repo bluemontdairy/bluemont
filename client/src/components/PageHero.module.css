@@ -1,0 +1,114 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  /* Clears the fixed header; the band runs up underneath it. */
+  padding: 150px 0 72px;
+  background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 60%, var(--blue-sky) 100%);
+  color: var(--bg-white);
+  border-bottom-left-radius: 50% 48px;
+  border-bottom-right-radius: 50% 48px;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--texture-swirl) repeat;
+  background-size: 340px;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.text {
+  max-width: 640px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-yellow);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--brand-yellow);
+}
+
+.title {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  color: var(--bg-white);
+  text-shadow: 0 4px 0 rgba(12, 34, 66, 0.25);
+}
+
+.intro {
+  margin-top: 14px;
+  max-width: 560px;
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.mascot {
+  flex-shrink: 0;
+  width: clamp(130px, 16vw, 200px);
+  height: auto;
+  margin-bottom: -24px;
+  filter: drop-shadow(0 12px 18px rgba(12, 34, 66, 0.3));
+  animation: bob 5.5s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 112px 0 48px;
+    border-bottom-left-radius: 50% 28px;
+    border-bottom-right-radius: 50% 28px;
+  }
+
+  .inner {
+    gap: 8px;
+  }
+
+  .intro {
+    font-size: 1rem;
+  }
+
+  /* No free corner on a phone (logo and menu sit up top), and the copy
+     needs the full width. */
+  .mascot {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot {
+    animation: none;
+  }
+}

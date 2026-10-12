@@ -1,30 +1,34 @@
 import { NextResponse } from 'next/server';
 import connectDB from '../../../lib/db';
 import Category from '../../../models/Category';
-import { protect } from '../../../lib/auth';
+import { authorize, protect } from '../../../lib/auth';
+import { categoryInput, getAdminCatalog, getPublicCatalog } from '../../../lib/catalog';
+import { refreshCatalog } from '../../../lib/catalogCache';
+import { denied, handleError, unauthorized } from '../../../lib/apiResponse';
 
-export async function GET() {
+// Public: active categories with their field definitions. ?all=1 (admins)
+// includes hidden ones.
+export async function GET(request) {
   try {
-    await connectDB();
-    const categories = await Category.find().sort({ sortOrder: 1 });
-    return NextResponse.json(categories);
+    if (new URL(request.url).searchParams.get('all') === '1') {
+      if (!(await protect(request))) return unauthorized();
+      return NextResponse.json((await getAdminCatalog()).categories);
+    }
+    return NextResponse.json((await getPublicCatalog()).categories);
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return handleError(error);
   }
 }
 
 export async function POST(request) {
   try {
-    const admin = await protect(request);
-    if (!admin) return NextResponse.json({ message: 'Not authorized' }, { status: 401 });
-
+    const auth = await authorize(request, 'categories.manage');
+    if (!auth.admin) return denied(auth);
     await connectDB();
-    const body = await request.json();
-    const category = new Category(body);
-    const createdCategory = await category.save();
-    
-    return NextResponse.json(createdCategory, { status: 201 });
+    const category = await Category.create(categoryInput(await request.json()));
+    refreshCatalog();
+    return NextResponse.json(category, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return handleError(error);
   }
 }

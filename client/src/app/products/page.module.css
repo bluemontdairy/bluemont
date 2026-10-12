@@ -1,44 +1,24 @@
+/* Products and category pages. Same type and colour system as the homepage:
+   Lilita One headings, Nunito text, blue / yellow palette. */
+
 .page {
   background-color: var(--bg-cream);
   min-height: 100vh;
 }
 
-/* The brown band runs up under the fixed header, so there's no strip of page
-   ground above it; the 150px top padding is what clears the header. */
-.header {
-  background-color: var(--accent-brown);
-  color: var(--bg-cream);
-  padding: calc(150px + var(--spacing-8)) 0 var(--spacing-12);
-  text-align: center;
-}
-
-.title {
-  font-family: var(--font-playfair), serif;
-  font-size: 3rem;
-  margin-bottom: var(--spacing-4);
-  color: var(--bg-cream);
-}
-
-.subtitle {
-  font-family: var(--font-outfit), sans-serif;
-  font-size: 1.2rem;
-  opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
 .catalogContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
-  padding-top: var(--spacing-8);
-  padding-bottom: var(--spacing-12);
+  gap: 28px;
+  padding-top: 44px;
+  padding-bottom: 120px;
 }
 
 @media (min-width: 768px) {
   .catalogContainer {
     flex-direction: row;
     align-items: flex-start;
+    gap: 36px;
   }
 }
 
@@ -48,161 +28,203 @@
 }
 
 @media (min-width: 768px) {
+  /* Stays in view below the floating header. Capped to the window's height
+     (scrolling inside if needed), since a sticky box taller than the
+     viewport would scroll away with the page. */
   .sidebar {
-    width: 250px;
+    width: 230px;
     position: sticky;
-    top: 100px;
+    top: 110px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding: 2px 6px 2px 2px;
   }
 }
 
 .filterGroup {
-  margin-bottom: var(--spacing-8);
+  margin-bottom: 14px;
+  padding: 18px 16px;
   background: var(--bg-white);
-  padding: var(--spacing-5);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid #E2EAF4;
+  border-radius: 20px;
 }
 
 .filterTitle {
-  font-family: var(--font-outfit);
-  font-size: 1.2rem;
-  color: var(--text-dark);
-  margin-bottom: var(--spacing-4);
-  border-bottom: 2px solid var(--border);
-  padding-bottom: var(--spacing-2);
+  margin-bottom: 8px;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary);
 }
 
 .chips {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-1);
+  gap: 2px;
 }
 
 .filterBtn {
   display: block;
   width: 100%;
-  text-align: left;
-  background: none;
+  padding: 7px 12px;
   border: none;
-  padding: var(--spacing-2) 0;
-  font-family: var(--font-inter);
+  border-radius: 10px;
+  background: none;
+  text-align: left;
+  font-family: var(--font-nunito), sans-serif;
   font-size: 0.95rem;
-  color: var(--text-body);
+  font-weight: 600;
+  color: #3A4A5E;
   cursor: pointer;
-  transition: color 0.2s ease, padding-left 0.2s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .filterBtn:hover {
-  color: var(--primary);
-  padding-left: var(--spacing-2);
+  background: var(--blue-mist);
+  color: var(--primary-dark);
 }
 
 .filterBtn.active {
-  color: var(--primary);
-  font-weight: 600;
+  background: var(--primary);
+  color: var(--bg-white);
+  font-weight: 800;
 }
 
-/* Phones: filters become horizontally scrolling pill rows so products
-   start above the fold. */
+.filterBtn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Phones: each filter is one labelled row of scrolling pills, without card
+   chrome, so the first products show near the top of the screen. */
 @media (max-width: 767px) {
+  .sidebar {
+    display: grid;
+    gap: 12px;
+  }
+
   .filterGroup {
-    margin-bottom: var(--spacing-3);
-    padding: var(--spacing-3);
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
   }
 
   .filterTitle {
-    font-size: 0.95rem;
-    margin-bottom: var(--spacing-2);
-    border-bottom: none;
-    padding-bottom: 0;
+    margin-bottom: 6px;
+    font-family: var(--font-nunito), sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: var(--primary-light);
   }
 
+  /* Bleeds to the screen edge so it's obvious the row scrolls. */
   .chips {
     flex-direction: row;
+    gap: 8px;
+    margin: 0 -16px;
+    padding: 0 16px 2px;
     overflow-x: auto;
-    gap: var(--spacing-2);
     scrollbar-width: none;
+  }
+
+  .chips::-webkit-scrollbar {
+    display: none;
   }
 
   .filterBtn {
     width: auto;
     flex: 0 0 auto;
+    padding: 7px 14px;
+    border: 1px solid #D5E2F1;
+    border-radius: 999px;
+    background: var(--bg-white);
     white-space: nowrap;
-    padding: var(--spacing-1) var(--spacing-3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-full);
-    font-size: 0.85rem;
-  }
-
-  .filterBtn:hover {
-    padding-left: var(--spacing-3);
+    font-size: 0.88rem;
   }
 
   .filterBtn.active {
-    background: var(--primary);
     border-color: var(--primary);
-    color: white;
   }
 }
 
 .main {
   flex-grow: 1;
+  min-width: 0;
 }
 
 .resultsHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-6);
-  font-family: var(--font-inter);
-  color: var(--text-muted);
+  margin-bottom: 18px;
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #5A6B80;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: var(--spacing-6);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 22px;
 }
 
 @media (max-width: 600px) {
   .grid {
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-3);
+    gap: 12px;
   }
 }
 
 .comingSoon {
-  margin-top: var(--spacing-10);
-  padding: var(--spacing-6);
-  border: 2px dashed var(--primary-light);
-  border-radius: var(--radius-lg);
-  background: var(--blue-mist);
+  margin-top: 56px;
+  padding: 28px 24px;
+  border-radius: 24px;
+  background: var(--texture-swirl) repeat, var(--brand-yellow);
+  background-size: 280px, auto;
+  background-blend-mode: soft-light;
   text-align: center;
 }
 
 .comingSoon h2 {
-  font-family: var(--font-outfit), sans-serif;
-  color: var(--ink);
-  margin-bottom: var(--spacing-2);
-}
-
-.comingSoonTag {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+  margin-bottom: 6px;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2rem);
   text-transform: uppercase;
   color: var(--primary-dark);
-  margin-bottom: var(--spacing-2);
+}
+
+.comingSoon p {
+  font-family: var(--font-nunito), sans-serif;
+  color: var(--ink);
+}
+
+.comingSoon .comingSoonTag {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bg-white);
 }
 
 .empty {
+  padding: 64px 0;
   text-align: center;
-  padding: var(--spacing-10) 0;
 }
 
 .empty p {
-  margin-bottom: var(--spacing-4);
-  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-family: var(--font-nunito), sans-serif;
   font-size: 1.1rem;
+  color: #5A6B80;
 }

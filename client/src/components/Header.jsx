@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import SiteImage from './SiteImage';
 import { usePathname } from 'next/navigation';
 import styles from './Header.module.css';
 
@@ -16,7 +16,7 @@ const RIGHT_LINKS = [{ href: '/#contact', label: 'Contact' }];
 
 const ALL_LINKS = [...LEFT_LINKS, ...RIGHT_LINKS];
 
-export default function Header() {
+export default function Header({ logo, mascot }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -49,7 +49,7 @@ export default function Header() {
   });
 
   return (
-    <div className={`${styles.headerWrapper} ${scrolled ? styles.scrolled : ''}`}>
+    <div className={`${styles.headerWrapper} ${scrolled ? styles.scrolled : ''} ${isMenuOpen ? styles.menuOpen : ''}`}>
       <header className={styles.header}>
         <nav className={`${styles.group} ${styles.groupLeft}`} aria-label="Primary">
           {LEFT_LINKS.map((l) => (
@@ -60,11 +60,8 @@ export default function Header() {
         </nav>
 
         <Link href="/" className={styles.logo} onClick={closeMenu} aria-label="Blue Mont Dairy, home">
-          <Image
-            src="/brand/logo/bluemont-white.webp"
-            alt=""
-            width={439}
-            height={354}
+          <SiteImage
+            media={logo}
             sizes="96px"
             className={styles.logoImg}
             preload
@@ -121,11 +118,8 @@ export default function Header() {
         <Link href="/partner" className={styles.sheetCta} onClick={closeMenu}>
           Stock Blue Mont in your store
         </Link>
-        <Image
-          src="/brand/mascots/yeti-wave.webp"
-          alt=""
-          width={840}
-          height={900}
+        <SiteImage
+          media={mascot}
           sizes="120px"
           className={styles.sheetMascot}
         />

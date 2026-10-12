@@ -3,8 +3,9 @@ import connectDB from '../../../lib/db';
 import Lead, { BUSINESS_TYPES, PARTNERSHIP_NEEDS } from '../../../models/Lead';
 import { protect } from '../../../lib/auth';
 import sendEmail from '../../../lib/sendEmail';
-import { buildFieldsEmail, safeSubject } from '../../../lib/email';
-import { appendLeadToSheet } from '../../../lib/sheets';
+import { safeSubject } from '../../../lib/email';
+import { buildEmail } from '../../../lib/emailLayout';
+import { getSiteInfo } from '../../../lib/siteSettings';
 import { str, oneOf, someOf, nepaliMobile } from '../../../lib/validate';
 import { clientIp, isRateLimited } from '../../../lib/rateLimit';
 import { handleError, unauthorized } from '../../../lib/apiResponse';
@@ -32,26 +33,40 @@ export async function POST(request) {
     await connectDB();
     const lead = await Lead.create(input);
 
-    // Email and sheet run in parallel; a failure in either is logged but the
-    // visitor still gets a success response because the lead is saved.
-    const { html, text } = buildFieldsEmail('New B2B partner inquiry', [
-      ['Business / store', input.businessName],
-      ['Contact person', input.contactPerson],
-      ['Mobile (WhatsApp)', input.mobileNumber],
-      ['Location', input.location],
-      ['Type of business', input.businessType],
-      ['Needs', input.partnershipNeed],
-      ['Footfall / brands handled', input.dailyFootfall],
-    ]);
+    const info = await getSiteInfo();
+    const { html, text } = await buildEmail({
+      mascot: 'home.partner-mascot',
+      preheader: `${input.businessName} in ${input.location} wants to stock Blue Mont.`,
+      eyebrow: 'New partner lead',
+      title: 'A shop wants in!',
+      greeting: `${input.businessName} wants Blue Mont in their freezer.`,
+      paragraphs: [
+        `${input.contactPerson} filled in the “Want us in your place?” form. Reply quickly while they’re keen: a WhatsApp message works best.`,
+      ],
+      rows: [
+        ['Business / store', input.businessName],
+        ['Contact person', input.contactPerson],
+        ['Mobile (WhatsApp)', input.mobileNumber],
+        ['Location', input.location],
+        ['Type of business', input.businessType],
+        ['Needs', input.partnershipNeed],
+        ['Footfall / brands handled', input.dailyFootfall],
+      ],
+      button: {
+        label: `WhatsApp ${input.contactPerson.split(' ')[0]}`,
+        url: `https://wa.me/977${input.mobileNumber}?text=${encodeURIComponent(
+          `Namaste ${input.contactPerson}, this is Blue Mont Dairy about stocking our ice cream at ${input.businessName}.`
+        )}`,
+      },
+      secondary: { label: 'Open partner leads', url: `${info.siteUrl}/admin/leads` },
+      reason: 'You’re getting this because this inbox receives Blue Mont website leads.',
+    });
 
-    const [emailResult, sheetResult] = await Promise.allSettled([
-      sendEmail({ subject: safeSubject(`New B2B lead: ${input.businessName}`), html, text }),
-      appendLeadToSheet(lead),
-    ]);
-    if (emailResult.status === 'rejected') console.error('Lead email failed', emailResult.reason);
-    if (sheetResult.status === 'rejected') console.error('Lead sheet sync failed', sheetResult.reason);
-    if (sheetResult.status === 'fulfilled' && sheetResult.value) {
-      await Lead.updateOne({ _id: lead._id }, { sheetSynced: true });
+    // The lead is saved either way; a failed email is only logged.
+    try {
+      await sendEmail({ to: info.notifyEmails || undefined, subject: safeSubject(`New B2B lead: ${input.businessName}`), html, text });
+    } catch (error) {
+      console.error('Lead email failed', error);
     }
 
     return NextResponse.json({ ok: true }, { status: 201 });

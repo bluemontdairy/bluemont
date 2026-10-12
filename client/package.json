@@ -7,22 +7,33 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "node --env-file=.env.local scripts/seed-products.mjs",
-    "create-admin": "node --env-file=.env.local scripts/create-admin.mjs"
+    "seed": "node --env-file=.env --env-file-if-exists=.env.local scripts/seed-products.mjs",
+    "create-admin": "node --env-file=.env --env-file-if-exists=.env.local scripts/create-admin.mjs",
+    "migrate": "node --env-file=.env --env-file-if-exists=.env.local scripts/migrate-catalog.mjs",
+    "set-site-media": "node --env-file=.env --env-file-if-exists=.env.local scripts/set-site-media.mjs",
+    "settings:import-env": "node --env-file=.env --env-file-if-exists=.env.local scripts/import-env-settings.mjs",
+    "vercel:login": "vercel login",
+    "vercel:link": "vercel link",
+    "deploy:preview": "vercel deploy",
+    "deploy:prod": "vercel deploy --prod"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.11.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.10.1",
     "next": "16.3.5",
     "nodemailer": "^10.0.10",
+    "qrcode": "^1.5.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
     "sharp": "^0.35.5"
   },
   "devDependencies": {
     "eslint": "^9",
-    "eslint-config-next": "16.3.5"
+    "eslint-config-next": "16.3.5",
+    "vercel": "^63.1.2"
   }
 }

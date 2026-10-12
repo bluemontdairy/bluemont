@@ -1,13 +1,25 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import ProductCard from './ProductCard';
 import styles from '../app/products/page.module.css';
 import { brandLabel, formatLabel, sortBrands, sortFormats } from '../lib/brands';
 
 // Filters run in the browser over the full catalog (a few dozen SKUs), so
 // every product is in the server-rendered HTML for search engines.
-export default function ProductCatalog({ products, initialBrand = '', initialFormat = '' }) {
+// Categories are links to their own pages (/products/kulfi) rather than
+// in-page filters, so each one can rank on its own.
+export default function ProductCatalog({
+  products,
+  categories = [],
+  activeCategory = '',
+  fallbackImage = null,
+  whatsapp,
+  initialBrand = '',
+  initialFormat = '',
+}) {
+  const fieldsByCategory = useMemo(() => new Map(categories.map((c) => [c._id, c.attributes])), [categories]);
   const brands = useMemo(() => sortBrands([...new Set(products.map((p) => p.brand))]), [products]);
   const formats = useMemo(() => sortFormats([...new Set(products.map((p) => p.format))]), [products]);
 
@@ -39,6 +51,27 @@ export default function ProductCatalog({ products, initialBrand = '', initialFor
   return (
     <div className={`container ${styles.catalogContainer}`}>
       <aside className={styles.sidebar} aria-label="Filter products">
+        {categories.length > 1 && (
+          <nav className={styles.filterGroup} aria-labelledby="filter-category">
+            <h2 id="filter-category" className={styles.filterTitle}>Category</h2>
+            <div className={styles.chips}>
+              <Link href="/products" className={chip(!activeCategory)} aria-current={!activeCategory ? 'page' : undefined}>
+                Everything
+              </Link>
+              {categories.map((c) => (
+                <Link
+                  key={c._id}
+                  href={`/products/${c.slug}`}
+                  className={chip(activeCategory === c.slug)}
+                  aria-current={activeCategory === c.slug ? 'page' : undefined}
+                >
+                  {c.name}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        )}
+
         <div className={styles.filterGroup} role="group" aria-labelledby="filter-brand">
           <h2 id="filter-brand" className={styles.filterTitle}>Brand</h2>
           <div className={styles.chips}>
@@ -76,7 +109,13 @@ export default function ProductCatalog({ products, initialBrand = '', initialFor
         {visible.length > 0 ? (
           <div className={styles.grid}>
             {visible.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard
+                key={product._id}
+                product={product}
+                fallback={fallbackImage}
+                fields={fieldsByCategory.get(product.categoryId)}
+                whatsapp={whatsapp}
+              />
             ))}
           </div>
         ) : (
@@ -90,7 +129,7 @@ export default function ProductCatalog({ products, initialBrand = '', initialFor
           </div>
         )}
 
-        {!brand && (
+        {!brand && !activeCategory && (
           <aside className={styles.comingSoon}>
             <p className={styles.comingSoonTag}>Coming soon</p>
             <h2>Fresh Dairy from Blue Mont</h2>

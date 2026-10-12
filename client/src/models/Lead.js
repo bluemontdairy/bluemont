@@ -47,10 +47,6 @@ const leadSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    sheetSynced: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     timestamps: true,

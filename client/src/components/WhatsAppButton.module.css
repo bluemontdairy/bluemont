@@ -12,13 +12,34 @@
   box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
   z-index: 1000;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: pulse 2s infinite;
+}
+
+/* Pulse ring. Scaling and fading a pseudo-element runs on the compositor;
+   animating box-shadow would repaint the page corner on every frame. */
+.fab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #25D366;
+  opacity: 0.6;
+  z-index: -1;
+  animation: pulse 2s ease-out infinite;
 }
 
 .fab:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(37, 211, 102, 0.6);
+}
+
+.fab:hover::before {
   animation: none;
+  opacity: 0;
+}
+
+.fab:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
 }
 
 .icon {
@@ -29,13 +50,20 @@
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    transform: scale(1);
+    opacity: 0.6;
   }
-  70% {
-    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
-  }
+  70%,
   100% {
-    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab::before {
+    animation: none;
+    opacity: 0;
   }
 }
 

@@ -47,7 +47,7 @@ function exportCsv(leads) {
   URL.revokeObjectURL(url);
 }
 
-export default function LeadsManager({ initialLeads }) {
+export default function LeadsManager({ initialLeads, canDelete = false }) {
   const router = useRouter();
   const [leads, setLeads] = useState(initialLeads);
   const [status, setStatus] = useState('');
@@ -183,7 +183,7 @@ export default function LeadsManager({ initialLeads }) {
         )}
       </div>
 
-      {open && <LeadDrawer lead={open} onClose={() => setOpenId(null)} onUpdate={update} onDelete={remove} />}
+      {open && <LeadDrawer lead={open} onClose={() => setOpenId(null)} onUpdate={update} onDelete={canDelete ? remove : null} />}
     </>
   );
 }
@@ -191,7 +191,6 @@ export default function LeadsManager({ initialLeads }) {
 function LeadDrawer({ lead, onClose, onUpdate, onDelete }) {
   const [notes, setNotes] = useState(lead.notes || '');
   const [saving, setSaving] = useState(false);
-  const [syncing, setSyncing] = useState(false);
 
   const wa = `https://wa.me/977${lead.mobileNumber}?text=${encodeURIComponent(
     `Namaste ${lead.contactPerson}, this is Blue Mont Dairy about stocking our ice cream at ${lead.businessName}.`
@@ -227,28 +226,6 @@ function LeadDrawer({ lead, onClose, onUpdate, onDelete }) {
             <dt>Needs</dt><dd>{lead.partnershipNeed.join(', ')}</dd>
             <dt>Footfall / brands</dt><dd>{lead.dailyFootfall || '—'}</dd>
             <dt>Received</dt><dd>{dateFmt.format(new Date(lead.createdAt))}</dd>
-            <dt>Google Sheet</dt>
-            <dd>
-              {lead.sheetSynced ? (
-                'Copied'
-              ) : (
-                <>
-                  Not copied{' '}
-                  <button
-                    type="button"
-                    className={`${s.btnGhost} ${s.btnSmall}`}
-                    disabled={syncing}
-                    onClick={async () => {
-                      setSyncing(true);
-                      await onUpdate(lead, { resyncSheet: true });
-                      setSyncing(false);
-                    }}
-                  >
-                    {syncing ? 'Retrying…' : 'Retry'}
-                  </button>
-                </>
-              )}
-            </dd>
           </dl>
 
           <div className={s.field}>
@@ -265,9 +242,13 @@ function LeadDrawer({ lead, onClose, onUpdate, onDelete }) {
         </div>
 
         <div className={s.drawerFoot}>
-          <button type="button" className={s.btnDanger} style={{ marginRight: 'auto' }} onClick={() => onDelete(lead)}>
-            Delete
-          </button>
+          {onDelete ? (
+            <button type="button" className={s.btnDanger} style={{ marginRight: 'auto' }} onClick={() => onDelete(lead)}>
+              Delete
+            </button>
+          ) : (
+            <span style={{ marginRight: 'auto' }} />
+          )}
           <button type="button" className={s.btnGhost} onClick={onClose}>Close</button>
           <button
             type="button"

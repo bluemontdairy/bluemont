@@ -8,7 +8,7 @@ export const BRAND_LABELS = {
   topkulfi: 'Top Kulfi',
 };
 
-export const FORMAT_ORDER = ['Cones', 'Cups', 'Sundaes', 'Bars', 'Sticks', 'Popsicles', 'Packs', 'Bulk'];
+export const FORMAT_ORDER = ['Cones', 'Cups', 'Sundaes', 'Bars', 'Sticks', 'Kulfi', 'Popsicles', 'Packs', 'Bulk'];
 
 export const FORMAT_LABELS = {
   Packs: 'Packs (Tubs)',

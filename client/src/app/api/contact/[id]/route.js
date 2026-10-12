@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import connectDB from '../../../../lib/db';
 import Contact from '../../../../models/Contact';
-import { protect } from '../../../../lib/auth';
-import { handleError, notFound, unauthorized } from '../../../../lib/apiResponse';
+import { authorize } from '../../../../lib/auth';
+import { denied, handleError, notFound } from '../../../../lib/apiResponse';
 
 export async function PATCH(request, { params }) {
   try {
-    if (!(await protect(request))) return unauthorized();
+    const auth = await authorize(request, 'messages.edit');
+    if (!auth.admin) return denied(auth);
     const { id } = await params;
     const { isRead } = await request.json();
 
@@ -20,7 +21,8 @@ export async function PATCH(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    if (!(await protect(request))) return unauthorized();
+    const auth = await authorize(request, 'messages.delete');
+    if (!auth.admin) return denied(auth);
     const { id } = await params;
 
     await connectDB();

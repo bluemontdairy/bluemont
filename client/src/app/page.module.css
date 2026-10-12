@@ -193,7 +193,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url('/brand/texture-swirl.webp') repeat;
+  background: var(--texture-swirl) repeat;
   background-size: 360px;
   opacity: 0.05;
   pointer-events: none;
@@ -446,7 +446,7 @@
   padding: 64px 28px 34px;
   border-radius: 28px;
   overflow: hidden;
-  background: url('/brand/texture-swirl.webp') repeat, var(--brand-yellow);
+  background: var(--texture-swirl) repeat, var(--brand-yellow);
   background-size: 300px, auto;
   background-blend-mode: soft-light;
   box-shadow: 0 24px 48px -28px rgba(184, 140, 20, 0.7);
@@ -580,7 +580,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: url('/brand/texture-swirl.webp') repeat;
+  background: var(--texture-swirl) repeat;
   background-size: 300px;
   opacity: 0.55;
 }
@@ -748,7 +748,7 @@
   max-width: 1040px;
   padding: 32px 170px 32px 36px;
   border-radius: 28px;
-  background: url('/brand/texture-swirl.webp') repeat, var(--brand-yellow);
+  background: var(--texture-swirl) repeat, var(--brand-yellow);
   background-size: 280px, auto;
   background-blend-mode: soft-light;
   box-shadow: 0 24px 48px -24px rgba(184, 140, 20, 0.6);
@@ -833,7 +833,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: url('/brand/texture-swirl.webp') repeat;
+  background: var(--texture-swirl) repeat;
   background-size: 340px;
   opacity: 0.8;
   pointer-events: none;
@@ -916,7 +916,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: url('/brand/texture-swirl.webp') repeat;
+  background: var(--texture-swirl) repeat;
   background-size: 340px;
   opacity: 0.06;
   pointer-events: none;
@@ -1197,10 +1197,35 @@
 .reviewWho {
   margin-top: auto;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   font-family: var(--font-nunito), sans-serif;
   font-size: 0.88rem;
   color: #5A6B80;
+}
+
+.reviewWho p {
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewPhoto {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(21, 51, 90, 0.15);
+}
+
+.reviewStars {
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  color: var(--brand-yellow-deep);
+}
+
+.reviewStars span {
+  color: #C9D7E8;
 }
 
 .reviewWho strong {
@@ -1242,6 +1267,33 @@
     justify-self: center;
   }
 
+  /* Brand cards turn sideways, art on the left, so three of them don't
+     stack into a 1,600px column on a phone (or leave an orphan on tablets). */
+  .brandGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .brandCard {
+    flex-direction: row;
+  }
+
+  .brandArt {
+    flex: 0 0 auto;
+    width: 32%;
+    height: auto;
+    align-items: center;
+    padding: 18px 8px;
+  }
+
+  .brandProduct {
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    max-height: 190px;
+    margin-bottom: 0;
+  }
+
   .statsList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 26px;
@@ -1267,29 +1319,95 @@
   }
 }
 
-@media (max-width: 640px) {
-  /* Extra bottom room so the mascots sit between the CTA and the
-     overlapping favourites card instead of on top of the button. */
+@media (max-width: 1024px) {
+  /* Room under the trust row so the mascots stand below it, not over it. */
   .hero {
-    min-height: 600px;
-    padding-top: 120px;
-    padding-bottom: 310px;
-  }
-
-  .heroMascot {
-    width: 118px;
-    bottom: 176px;
-    left: 12%;
+    padding-bottom: 300px;
   }
 
   .heroMascotRight {
+    bottom: 130px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* The hero sizes to its copy on phones. The bottom padding leaves a strip
+     between the trust row and the overlapping favourites card where the
+     mascots stand, peeking over the card's top edge. */
+  .hero {
+    min-height: 0;
+    padding-top: 112px;
+    padding-bottom: 270px;
+  }
+
+  .heroCtas {
+    flex-direction: column;
+    align-items: stretch;
+    width: min(100%, 290px);
+  }
+
+  .heroCtas .btn {
+    justify-content: center;
+  }
+
+  .heroMascot {
     width: 104px;
-    bottom: 180px;
-    right: 12%;
+    bottom: 150px;
+    left: 8%;
+  }
+
+  .heroMascotRight {
+    width: 92px;
+    bottom: 154px;
+    right: 8%;
+  }
+
+  .favCard {
+    padding: 24px 18px;
   }
 
   .favCarousel {
     padding: 0 8px;
+  }
+
+  .partnerInner {
+    gap: 0;
+    padding-top: 72px;
+    padding-bottom: 100px;
+  }
+
+  .partnerMascot {
+    width: 150px;
+    justify-self: end;
+    margin-top: -12px;
+  }
+
+  .brandArt {
+    width: 112px;
+  }
+
+  .brandProduct {
+    max-height: 150px;
+  }
+
+  .brandBody {
+    padding: 18px 16px 18px 14px;
+    gap: 6px;
+  }
+
+  .brandLogo {
+    height: 40px;
+    max-width: 130px;
+  }
+
+  .brandName {
+    font-size: 1.7rem;
+    line-height: 40px;
+  }
+
+  .brandText {
+    font-size: 0.92rem;
+    line-height: 1.5;
   }
 
   .valueShelf {
@@ -1327,10 +1445,6 @@
     right: 0;
     top: -10px;
     z-index: -1;
-  }
-
-  .hero {
-    padding-bottom: 340px;
   }
 
   .btnLg {
