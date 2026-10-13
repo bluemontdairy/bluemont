@@ -27,7 +27,7 @@ const thumb = (url, w) => cldTransform(url, `f_auto,q_auto,w_${w}`);
 // A monster card as the homepage draws it, for the list and the editor.
 function MonsterPreview({ monster, size = 96 }) {
   return (
-    <div className={s.monsterPreview} style={{ width: size, height: Math.round(size * 1.14), background: monster.tint, '--scoop': `${Math.round(size * 0.33)}px` }}>
+    <div className={s.monsterPreview} style={{ width: size, height: Math.round(size * 1.14), background: monster.tint, '--scoop': `${Math.round(size * 0.4)}px`, '--pad': `${Math.round(size / 10)}px` }}>
       {monster.image ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={thumb(monster.image, size * 2)} alt="" />
