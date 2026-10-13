@@ -891,3 +891,34 @@
   align-items: flex-end;
   gap: var(--spacing-2);
 }
+
+/* Monster card preview (Admin → Monsters) */
+.monsterPreview {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  padding: 10% 10% 14%;
+  border-radius: 16px;
+  flex-shrink: 0;
+}
+
+.monsterPreview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.monsterPreview > .hint {
+  align-self: center;
+}
+
+.monsterPreviewScoop {
+  position: absolute;
+  right: 4%;
+  bottom: 10%;
+  width: var(--scoop);
+  height: auto;
+  max-width: none;
+  filter: drop-shadow(0 3px 4px rgba(12, 34, 66, 0.2));
+  transform: rotate(8deg);
+}

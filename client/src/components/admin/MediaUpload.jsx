@@ -13,7 +13,7 @@ const LIMITS = {
  * Upload button. The server signs the upload (/api/upload), then the file
  * goes straight from the browser to Cloudinary. The result
  * ({ url, publicId, width, height, resourceType }) goes to onUploaded.
- * `purpose` picks the Cloudinary folder: product, category, review or site.
+ * `purpose` picks the Cloudinary folder: product, category, review, monster or site.
  */
 export default function MediaUpload({ purpose, kind = 'image', label, onUploaded, onError, disabled }) {
   const [progress, setProgress] = useState(null);

@@ -4,8 +4,10 @@ import styles from './page.module.css';
 import Carousel from '../components/Carousel';
 import HeroVideo from '../components/HeroVideo';
 import SiteImage from '../components/SiteImage';
-import { BRANDS, MONSTERS, VALUE_PICKS, VALUE_POINTS, buildStats } from '../lib/homeContent';
+import Scoop from '../components/Scoop';
+import { BRANDS, VALUE_PICKS, VALUE_POINTS, buildStats } from '../lib/homeContent';
 import { getPublishedReviews } from '../lib/reviews';
+import { getHomeMonsters } from '../lib/monsters';
 import { getSiteInfo } from '../lib/siteSettings';
 import { getSiteMedia } from '../lib/siteMedia';
 import { getPublicCatalog } from '../lib/catalog';
@@ -35,36 +37,6 @@ function Arrow() {
   );
 }
 
-// A single ice-cream scoop with a drippy rim, tinted per flavour. The shade
-// gradient's id comes from the colour, which is unique per monster.
-const SCOOP_SHAPE =
-  'M8 32a24 24 0 0 1 48 0c0 1-.1 2-.2 3 1.4 4-1.8 7-4.4 4.6-1.6 5.4-6.6 5-7.4.4-2.2 6.6-8.4 6.6-9.6 0-2 5.2-7.6 5-8.6-.2-1.6 4.2-6.6 3.6-6.8-1.4-3 1.4-5.6-1.6-4.2-4.4C8.1 33.4 8 32.7 8 32z';
-
-function Scoop({ color }) {
-  const shade = `scoop-shade-${color.replace('#', '')}`;
-  return (
-    <svg viewBox="0 0 64 58" className={styles.scoop} aria-hidden="true">
-      <defs>
-        <radialGradient id={shade} cx="0.36" cy="0.3" r="0.8">
-          <stop offset="0" stopColor="#fff" stopOpacity="0.45" />
-          <stop offset="0.45" stopColor="#fff" stopOpacity="0" />
-          <stop offset="1" stopColor="#000" stopOpacity="0.28" />
-        </radialGradient>
-      </defs>
-      <path d={SCOOP_SHAPE} fill={color} />
-      <path d={SCOOP_SHAPE} fill={`url(#${shade})`} />
-      <path
-        d="M14 28c2-1 3 1 5 0M26 22c2-1 3 1 5 0M38 27c2-1 3 1 5 0M20 36c2-1 3 1 5 0M34 35c2-1 3 1 5 0"
-        fill="none"
-        stroke="rgba(0,0,0,0.1)"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-      <ellipse cx="22" cy="18" rx="6" ry="3.2" fill="#fff" opacity="0.6" transform="rotate(-28 22 18)" />
-    </svg>
-  );
-}
-
 // Product photo for next/image. Photos uploaded before sizes were stored
 // fall back to a tall packshot ratio.
 const productImg = (p) => ({ src: p.image, w: p.imageWidth || 600, h: p.imageHeight || 900 });
@@ -77,6 +49,7 @@ export default async function Home() {
     getSiteInfo(),
     getPublishedReviews(),
   ]);
+  const monsters = await getHomeMonsters(media);
   const { stats, socials } = info;
   // "@bluemont_dairy" from the Instagram link, for the button label.
   const instagramHandle = socials.instagram ? `@${new URL(socials.instagram).pathname.split('/').filter(Boolean)[0] || 'instagram'}` : '';
@@ -391,11 +364,11 @@ export default async function Home() {
           </div>
 
           <Carousel label="flavour monsters" trackClassName={styles.monsterTrack}>
-            {MONSTERS.map((m) => (
-              <li key={m.name} className={styles.monsterCard}>
+            {monsters.map((m) => (
+              <li key={m._id || m.name} className={styles.monsterCard}>
                 <div className={styles.monsterImgWrap} style={{ background: m.tint }}>
-                  <SiteImage media={media[m.image]} sizes="220px" className={styles.monsterImg} />
-                  <Scoop color={m.scoop} />
+                  <Image src={m.image} alt="" width={m.imageWidth || 700} height={m.imageHeight || 800} sizes="220px" className={styles.monsterImg} />
+                  <Scoop color={m.scoopColor} image={m.scoopImage} className={styles.scoop} />
                 </div>
                 <div className={styles.monsterLabel}>
                   <h3>{m.name}</h3>

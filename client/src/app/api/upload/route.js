@@ -13,8 +13,8 @@ import { denied, forbidden, handleError } from '../../../lib/apiResponse';
 // incoming resize to at most 2400 px, so a signed request can't be reused to
 // put anything else in the account. Signatures expire after an hour.
 
-const FOLDERS = { product: 'products', category: 'categories', site: 'site', review: 'reviews' };
-const PERMISSION = { product: 'products.edit', category: 'categories.manage', site: 'siteMedia.manage', review: 'reviews.edit' };
+const FOLDERS = { product: 'products', category: 'categories', site: 'site', review: 'reviews', monster: 'monsters' };
+const PERMISSION = { product: 'products.edit', category: 'categories.manage', site: 'siteMedia.manage', review: 'reviews.edit', monster: 'monsters.edit' };
 const FORMATS = { image: 'jpg,jpeg,png,webp,avif', video: 'mp4,webm,mov' };
 
 export async function POST(request) {

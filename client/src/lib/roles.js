@@ -10,7 +10,7 @@ export const ROLE_LABELS = {
 
 export const ROLE_DESCRIPTIONS = {
   superadmin: 'Everything, including categories, site images, site settings, deleting records and managing admins.',
-  staff: 'Day-to-day work: edit, hide and feature products, add customer reviews, handle partner leads and messages. Can’t delete or change site settings.',
+  staff: 'Day-to-day work: edit, hide and feature products, add customer reviews and monsters, handle partner leads and messages. Can’t delete or change site settings.',
 };
 
 const PERMISSIONS = {
@@ -27,8 +27,10 @@ const PERMISSIONS = {
     'settings.manage',
     'reviews.edit',
     'reviews.delete',
+    'monsters.edit',
+    'monsters.delete',
   ],
-  staff: ['products.edit', 'leads.edit', 'messages.edit', 'reviews.edit'],
+  staff: ['products.edit', 'leads.edit', 'messages.edit', 'reviews.edit', 'monsters.edit'],
 };
 
 /** True when the admin's role includes the permission. */

@@ -12,6 +12,7 @@ const LINKS = [
   { href: '/admin/products', label: 'Products' },
   { href: '/admin/categories', label: 'Categories', permission: 'categories.manage' },
   { href: '/admin/reviews', label: 'Reviews', permission: 'reviews.edit' },
+  { href: '/admin/monsters', label: 'Monsters', permission: 'monsters.edit' },
   { href: '/admin/site-media', label: 'Site images', permission: 'siteMedia.manage' },
   { href: '/admin/settings', label: 'Site settings', permission: 'settings.manage' },
   { href: '/admin/messages', label: 'Messages', count: 'unreadMessages' },

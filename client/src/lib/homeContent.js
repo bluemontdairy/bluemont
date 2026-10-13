@@ -40,7 +40,9 @@ export const BRANDS = [
   },
 ];
 
-// `scoop` tints the ice-cream scoop drawn beside each monster.
+// The built-in "Meet the monsters" line-up, shown until monsters are added in
+// Admin → Monsters (which can import these to start from). `scoop` tints the
+// ice-cream scoop drawn beside each monster.
 export const MONSTERS = [
   { name: 'The Main Monster', flavour: 'Chief taster', image: 'monster.main', tint: '#DCEBFA', scoop: '#FFF3D6' },
   { name: 'Vanilla', flavour: 'Soft and creamy', image: 'monster.vanilla', tint: '#FFF4CC', scoop: '#FFF0C2' },

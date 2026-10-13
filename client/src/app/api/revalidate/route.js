@@ -4,6 +4,7 @@ import { CATALOG_TAG } from '../../../lib/catalog';
 import { SITE_MEDIA_TAG } from '../../../lib/siteMedia';
 import { SETTINGS_TAG } from '../../../lib/siteSettings';
 import { REVIEWS_TAG } from '../../../lib/reviews';
+import { MONSTERS_TAG } from '../../../lib/monsters';
 import { safeEqual } from '../../../lib/secretBox';
 
 // Lets the seed and site-media scripts, which write to MongoDB directly,
@@ -19,6 +20,7 @@ export async function POST(request) {
   revalidateTag(SITE_MEDIA_TAG, { expire: 0 });
   revalidateTag(SETTINGS_TAG, { expire: 0 });
   revalidateTag(REVIEWS_TAG, { expire: 0 });
+  revalidateTag(MONSTERS_TAG, { expire: 0 });
   revalidatePath('/', 'layout');
   return NextResponse.json({ ok: true });
 }
