@@ -16,6 +16,9 @@ const configure = async () => {
   return { client: cloudinary, folder: c.folder };
 };
 
+/** A configured client and the site's folder, for server-side uploads. */
+export const getCloudinary = configure;
+
 /**
  * Deletes an asset this site uploaded. Ids outside the site's folder are
  * ignored, so a bad value can never remove other files from the account.

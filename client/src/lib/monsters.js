@@ -44,7 +44,8 @@ const cachedAll = unstable_cache(
 
 /**
  * The built-in monsters (lib/homeContent.js), with pictures from their site
- * media slots. `media` is getSiteMedia().
+ * media slots, for the homepage until any are saved. `media` is
+ * getSiteMedia().
  */
 export const builtInMonsters = (media) =>
   MONSTERS.map((m, i) => ({
@@ -87,11 +88,9 @@ const colour = (value, label) => {
   return out.toUpperCase();
 };
 
-// Uploaded pictures are on Cloudinary; the imported built-ins point at their
-// files in /public/brand.
 const picture = (value, label, required) => {
   const url = str(value, { max: 500, required, label });
-  if (url && !isCloudinaryUrl(url) && !/^\/brand\/[\w./-]+$/.test(url)) {
+  if (url && !isCloudinaryUrl(url)) {
     throw new ValidationError(`Upload the ${label.toLowerCase()} from the admin panel.`);
   }
   return url;
@@ -107,13 +106,13 @@ export function monsterInput(body) {
     name: str(body.name, { max: 40, required: true, label: 'Name' }),
     flavour: str(body.flavour, { max: 60, label: 'Tagline' }),
     image,
-    imagePublicId: isCloudinaryUrl(image) ? str(body.imagePublicId, { max: 300, label: 'Picture id' }) : '',
+    imagePublicId: str(body.imagePublicId, { max: 300, label: 'Picture id' }),
     imageWidth: size(body.imageWidth),
     imageHeight: size(body.imageHeight),
     tint: colour(body.tint, 'Card colour'),
     scoopColor: colour(body.scoopColor, 'Scoop colour'),
     scoopImage,
-    scoopImagePublicId: isCloudinaryUrl(scoopImage) ? str(body.scoopImagePublicId, { max: 300, label: 'Scoop picture id' }) : '',
+    scoopImagePublicId: scoopImage ? str(body.scoopImagePublicId, { max: 300, label: 'Scoop picture id' }) : '',
     isActive: body.isActive !== false,
     sortOrder: Number.isFinite(Number(body.sortOrder)) ? Number(body.sortOrder) : 0,
   };

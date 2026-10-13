@@ -6,11 +6,13 @@
 //                                     to Cloudinary and link them to products with no image
 //   npm run seed -- --site-media      also upload the built-in site images (logos, mascots,
 //                                     textures...) to Cloudinary for slots with no upload
+//   npm run seed -- --monsters        also add the built-in "Meet the monsters" line-up, with
+//                                     pictures and scoops on Cloudinary (only if there are none)
 //
 // Existing products and categories are never overwritten without --reset,
 // so prices or images edited in the admin panel survive a re-run. Images are
-// normally uploaded by the owners from the admin panel; --images and
-// --site-media are for filling a fresh site in one go.
+// normally uploaded by the owners from the admin panel; --images,
+// --site-media and --monsters are for filling a fresh site in one go.
 
 import path from 'node:path';
 import mongoose from 'mongoose';
@@ -18,6 +20,8 @@ import { v2 as cloudinary } from 'cloudinary';
 import Product from '../src/models/Product.js';
 import Category from '../src/models/Category.js';
 import SiteMedia from '../src/models/SiteMedia.js';
+import Monster from '../src/models/Monster.js';
+import { builtInMonsterRecords } from '../src/lib/monsterSeed.js';
 import { DEFAULT_CATEGORIES } from '../src/lib/categorySchema.js';
 import { SITE_MEDIA_SLOTS } from '../src/lib/siteMediaSlots.js';
 import { CATALOG } from './lib/catalog-data.mjs';
@@ -28,6 +32,7 @@ const args = new Set(process.argv.slice(2));
 const reset = args.has('--reset');
 const withImages = args.has('--images');
 const withSiteMedia = args.has('--site-media');
+const withMonsters = args.has('--monsters');
 
 if (!process.env.MONGODB_URI) {
   console.error('MONGODB_URI is not set (expected in .env).');
@@ -55,7 +60,7 @@ async function upload(localPath, folder) {
 await mongoose.connect(process.env.MONGODB_URI);
 let FOLDER = 'bluemont';
 try {
-  if (withImages || withSiteMedia) FOLDER = await configureCloudinary(cloudinary);
+  if (withImages || withSiteMedia || withMonsters) FOLDER = await configureCloudinary(cloudinary);
 
   // Categories
   await Category.syncIndexes();
@@ -104,6 +109,20 @@ try {
       count += 1;
     }
     console.log(`Filled ${count} site image slots.`);
+  }
+
+  // Built-in monsters -> Cloudinary and the Monster collection, using each
+  // monster's site image (an admin upload if there is one).
+  if (withMonsters) {
+    if (await Monster.exists({})) {
+      console.log('Monsters: already added, skipped.');
+    } else {
+      console.log('Uploading monsters and scoops…');
+      const pictureSource = async (key) => (await SiteMedia.findOne({ key }).lean())?.url || publicFile(SITE_MEDIA_SLOTS.find((s) => s.key === key).fallback);
+      const records = await builtInMonsterRecords({ cloudinary, folder: FOLDER, pictureSource, updatedBy: 'seed' });
+      await Monster.insertMany(records);
+      console.log(`Monsters: added ${records.length}.`);
+    }
   }
   await refreshSite();
 } finally {
