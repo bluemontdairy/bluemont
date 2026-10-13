@@ -167,6 +167,8 @@
   overflow: hidden;
   /* At least 16:9 for the video, but grows with the copy. aspect-ratio can't
      do that here: overflow:hidden disables its content-based minimum. */
+  /* Own stacking context, so the video, wash and mascots composite together. */
+  isolation: isolate;
   min-height: max(640px, 56.25vw);
   padding: 150px 16px 210px;
   background: linear-gradient(180deg, var(--primary) 0%, var(--blue-sky) 62%, #9CC3EE 100%);
@@ -187,6 +189,7 @@
       rgba(45, 107, 178, 0.35) 62%,
       rgba(79, 143, 214, 0.75) 100%);
   pointer-events: none;
+  transform: translateZ(0);
 }
 
 .heroTexture {
@@ -298,6 +301,17 @@
   width: clamp(100px, 15vw, 210px);
   height: auto;
   animation: bob 6s ease-in-out -2s infinite;
+}
+
+/* Each bobbing figure gets its own GPU layer. Otherwise some GPUs (seen on
+   Chrome over the playing video) squash all three into one layer spanning
+   from the left mascot to the right one, painted without the blue wash: a
+   pale box with a visible edge across the hero's foot. */
+.heroMascot,
+.heroMascotRight,
+.heroKulfi {
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* ---------- 2. favourites ---------- */

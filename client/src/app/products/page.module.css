@@ -99,58 +99,322 @@
   outline-offset: 2px;
 }
 
-/* Phones: each filter is one labelled row of scrolling pills, without card
-   chrome, so the first products show near the top of the screen. */
+/* ---------- Phones: Sort | Filter bar with bottom sheets ---------- */
+
+.mobileBar,
+.backdrop,
+.sheet {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .sidebar {
-    display: grid;
-    gap: 12px;
-  }
-
-  .filterGroup {
-    margin: 0;
-    padding: 0;
-    background: none;
-    border: 0;
-    border-radius: 0;
-  }
-
-  .filterTitle {
-    margin-bottom: 6px;
-    font-family: var(--font-nunito), sans-serif;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    color: var(--primary-light);
-  }
-
-  /* Bleeds to the screen edge so it's obvious the row scrolls. */
-  .chips {
-    flex-direction: row;
-    gap: 8px;
-    margin: 0 -16px;
-    padding: 0 16px 2px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .chips::-webkit-scrollbar {
     display: none;
   }
 
-  .filterBtn {
-    width: auto;
-    flex: 0 0 auto;
-    padding: 7px 14px;
-    border: 1px solid #D5E2F1;
-    border-radius: 999px;
-    background: var(--bg-white);
-    white-space: nowrap;
-    font-size: 0.88rem;
+  .catalogContainer {
+    gap: 18px;
+    padding-top: 24px;
   }
 
-  .filterBtn.active {
-    border-color: var(--primary);
+  /* Sticks just under the floating header once the page scrolls. */
+  .mobileBar {
+    position: sticky;
+    top: 78px;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--bg-white);
+    border: 1px solid #D5E2F1;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(12, 34, 66, 0.08);
+    overflow: hidden;
+  }
+
+  .mobileBarBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 8px;
+    border: 0;
+    background: none;
+    color: var(--primary);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobileBarBtn + .mobileBarBtn {
+    border-left: 1px solid #D5E2F1;
+  }
+
+  .mobileBarBtn span {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.2;
+  }
+
+  .mobileBarBtn strong {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--primary-dark);
+  }
+
+  .mobileBarBtn small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-nunito), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #5A6B80;
+  }
+
+  .mobileBarBtn:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: -3px;
+  }
+
+  .badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--brand-yellow);
+    font-family: var(--font-nunito), sans-serif;
+    font-style: normal;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    background: rgba(12, 34, 66, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .backdropOpen {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sheet {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    max-height: 80vh;
+    max-height: 80dvh;
+    background: var(--bg-white);
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 -10px 30px rgba(12, 34, 66, 0.18);
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: sheetUp 0.25s ease;
+  }
+
+  .sheet[hidden] {
+    display: none;
+  }
+
+  .sheetHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #E2EAF4;
+  }
+
+  .sheetHead h2 {
+    font-family: var(--font-display), sans-serif;
+    font-weight: 400;
+    font-size: 1.4rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--primary-dark);
+  }
+
+  .sheetClose {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--blue-mist);
+    color: var(--primary-dark);
+    cursor: pointer;
+  }
+
+  /* Groups down the left, the chosen group's options on the right. */
+  .sheetBody {
+    display: grid;
+    grid-template-columns: 118px 1fr;
+    min-height: 300px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .sheetTabs {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-cream);
+    border-right: 1px solid #E2EAF4;
+  }
+
+  .sheetTab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 15px 14px;
+    border: 0;
+    border-bottom: 1px solid #E2EAF4;
+    border-left: 4px solid transparent;
+    background: none;
+    text-align: left;
+    font-family: var(--font-nunito), sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #3A4A5E;
+    cursor: pointer;
+  }
+
+  .sheetTabActive {
+    border-left-color: var(--primary);
+    background: var(--bg-white);
+    color: var(--primary-dark);
+    font-weight: 800;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-orange);
+    flex-shrink: 0;
+  }
+
+  .sheetOptions,
+  .sortList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .sortList {
+    padding: 10px 16px 18px;
+  }
+
+  .sheetOption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    text-align: left;
+    font-family: var(--font-nunito), sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #3A4A5E;
+    cursor: pointer;
+  }
+
+  /* Radio-style marker. */
+  .sheetOption::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border: 2px solid #B9CCE3;
+    border-radius: 50%;
+    transition: border 0.15s ease;
+  }
+
+  .sheetOptionActive {
+    background: var(--blue-mist);
+    color: var(--primary-dark);
+    font-weight: 800;
+  }
+
+  .sheetOptionActive::before {
+    border: 6px solid var(--primary);
+  }
+
+  .sheetOption:focus-visible,
+  .sheetTab:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: -3px;
+  }
+
+  .sheetFoot {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 10px;
+    padding: 12px 16px 14px;
+    border-top: 1px solid #E2EAF4;
+  }
+
+  .resetBtn,
+  .doneBtn {
+    padding: 12px;
+    border-radius: 12px;
+    font-family: var(--font-display), sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .resetBtn {
+    border: 2px solid var(--primary);
+    background: var(--bg-white);
+    color: var(--primary);
+  }
+
+  .resetBtn:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .doneBtn {
+    border: 2px solid var(--primary);
+    background: var(--primary);
+    color: var(--bg-white);
+  }
+}
+
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    animation: none;
   }
 }
 
@@ -159,12 +423,51 @@
   min-width: 0;
 }
 
-.resultsHeader {
+.resultsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
   margin-bottom: 18px;
+}
+
+.resultsHeader {
   font-family: var(--font-nunito), sans-serif;
   font-size: 0.92rem;
   font-weight: 600;
   color: #5A6B80;
+}
+
+.sortSelect {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.sortSelect select {
+  padding: 7px 12px;
+  border: 1px solid #D5E2F1;
+  border-radius: 10px;
+  background: var(--bg-white);
+  font: 600 0.92rem var(--font-nunito), sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* Phones sort from the bar's Sort sheet instead. */
+@media (max-width: 767px) {
+  .sortSelect {
+    display: none;
+  }
 }
 
 .grid {
