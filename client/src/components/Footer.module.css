@@ -170,6 +170,37 @@ a:hover .brandName {
   color: var(--brand-yellow);
 }
 
+/* Studio credit: the Siggold mark between "Made by" and the name. */
+.madeBy {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(255, 255, 255, 0.65);
+  transition: color 0.15s ease;
+}
+
+.madeBy span {
+  font-weight: 800;
+  color: var(--bg-white);
+  transition: color 0.15s ease;
+}
+
+.madeByMark {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
+  transition: transform 0.2s ease, opacity 0.15s ease;
+}
+
+.madeBy:hover span {
+  color: var(--brand-yellow);
+}
+
+.madeBy:hover .madeByMark {
+  opacity: 1;
+  transform: rotate(-8deg) scale(1.08);
+}
+
 @media (max-width: 960px) {
   .footerContent {
     grid-template-columns: 1fr 1fr;

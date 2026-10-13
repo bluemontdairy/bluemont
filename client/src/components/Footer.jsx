@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import SiteImage from './SiteImage';
 import { telHref } from '../lib/settingsSchema';
 import styles from './Footer.module.css';
@@ -127,6 +128,11 @@ export default function Footer({ logo, mascot, info }) {
 
       <div className={`container ${styles.bottomBar}`}>
         <p>&copy; {new Date().getFullYear()} {info.legalName}. All rights reserved.</p>
+        <a href="https://www.siggold.com" target="_blank" rel="noopener" className={styles.madeBy}>
+          Made by
+          <Image src="/brand/siggold-mark.svg" alt="" width={18} height={18} className={styles.madeByMark} unoptimized />
+          <span>Siggold</span>
+        </a>
         <a href="#top" className={styles.toTop}>
           Back to top
           <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 15 L12 8 L19 15" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>
